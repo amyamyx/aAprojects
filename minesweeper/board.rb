@@ -48,7 +48,10 @@ class Board
       row.each do |tile|
         print "#{tile.to_s}|"
       end
+      
       puts 
     end
   end
 end
+
+
