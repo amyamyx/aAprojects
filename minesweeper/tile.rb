@@ -54,6 +54,16 @@ class Tile
     neighbors.count { |tile| tile.is_bomb }
   end
 
+  def reveal_neighbor
+    neighbors.each do |tile|
+      next if tile.revealed
+      next if tile.is_bomb
+      next if tile.flagged
+      tile.reveal
+      tile.reveal_neighbor if tile.neighbor_bomb_count == 0
+    end
+  end
+
   def pos
     row_i = @board.grid.map { |row| row.include?(self) }.index(true)
     col_i = @board.grid[row_i].index(self)
