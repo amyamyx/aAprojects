@@ -43,6 +43,27 @@ class Board
     self[pos].reveal
   end
 
+  def neighbors(pos)
+    tiles = []
+    row, col = pos
+
+    -1.upto(1) do |i|
+      -1.upto(1) do |j|
+        next if i == 0 && j == 0
+        new_row, new_col = row + i, col + j
+        next if new_row < 0 || new_col < 0
+        neighbor_tile = self[[new_row, new_col]]
+        tiles << neighbor_tile
+      end
+    end
+
+    tiles
+  end
+
+  def neighbor_bomb_count(pos)
+    neighbors(pos).count { |tile| tile.is_bomb }
+  end
+
   attr_reader :grid
   alias_method :rows, :grid
 
