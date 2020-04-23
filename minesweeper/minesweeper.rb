@@ -106,6 +106,3 @@ class Minesweeper
   end
 
 end
-
-# g = Minesweeper.new(:beginner)
-# g.run
