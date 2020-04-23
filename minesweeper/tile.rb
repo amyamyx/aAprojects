@@ -51,7 +51,7 @@ class Tile
   end
 
   def neighbor_bomb_count
-    
+    neighbors.count { |tile| tile.is_bomb }
   end
 
   def pos
