@@ -1,4 +1,7 @@
 require_relative "board"
+# require "byebug"
+
+# TODO: complete actions after stepping on a bomb
 
 class Minesweeper
   def initialize(difficulty)
@@ -22,7 +25,7 @@ class Minesweeper
     until game_over?
       play_turn
     end
-    sybtem("clear")
+    system("clear")
     @board.render
   end
 
@@ -42,12 +45,12 @@ class Minesweeper
 
       begin
         pos = parse_pos(gets.chomp)
+        valid_pos?(pos)
       rescue
         puts "Did you type a comma to separate the numbers? Try again"
         pos = nil
       end
 
-      puts "Invalid position. try gagin!" if !valid_pos?(pos)
     end
 
     pos
@@ -72,7 +75,7 @@ class Minesweeper
   end
 
   def record_action(pos, action)
-    action == 1 ? @board[pos].toggle_flag : @board[pos].reveal
+    action == 1 ? @board[pos].toggle_flag : @board.reveal(pos)
   end
 
   def valid_pos?(pos)
@@ -93,3 +96,6 @@ class Minesweeper
   end
 
 end
+
+g = Minesweeper.new(:beginner)
+g.run

@@ -38,6 +38,11 @@ class Board
     @grid.length
   end
 
+  def reveal(pos)
+    @bombed_tile = self[pos] if self[pos].is_bomb
+    self[pos].reveal
+  end
+
   attr_reader :grid
   alias_method :rows, :grid
 
