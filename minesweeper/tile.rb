@@ -1,13 +1,15 @@
 require "colorize"
+require_relative "board"
 
 class Tile
-  def initialize(is_bomb)
+  def initialize(is_bomb, board)
+    @board = board
     @is_bomb = is_bomb
     @revealed = false
     @flagged = false
   end
 
-  attr_reader :is_bomb, :revealed, :flagged
+  attr_reader :is_bomb, :revealed, :flagged, :board
   
   def reveal
     @revealed = true
@@ -31,4 +33,7 @@ class Tile
   def triggered_bomb_to_s
     "✸".colorize(:yello).colorize(background: :red)
   end
+
+  #adding_board on initialize
+
 end

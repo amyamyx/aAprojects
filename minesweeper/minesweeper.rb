@@ -2,7 +2,7 @@ require_relative "board"
 
 class Minesweeper
   def initialize(difficulty)
-    @board = Board.place_mines(difficulty)
+    @board = Board.new(difficulty)
   end
 
   def play_turn
@@ -19,6 +19,8 @@ class Minesweeper
   end
 
   def run
+    @board.place_mines
+    
     until game_over?
       play_turn
     end

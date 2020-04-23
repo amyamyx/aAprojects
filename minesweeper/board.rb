@@ -6,31 +6,60 @@ class Board
     intermediate: [[16, 16], 40],
     expert: [[16, 30], 99]
   }
-  def self.place_mines(difficulty)
-    dimention, num_mines = DIFFICULTIES[difficulty]
-    board_size = dimention.inject(:*)
-    grid = Array.new(dimention[0]) { Array.new(dimention[1]) }
+  # def self.place_mines(difficulty)
+  #   dimention, num_mines = DIFFICULTIES[difficulty]
+  #   board_size = dimention.inject(:*)
+  #   grid = Array.new(dimention[0]) { Array.new(dimention[1]) }
 
-    tiles = []
-    (board_size - num_mines).times { tiles << Tile.new(false) }
-    num_mines.times { tiles << Tile.new(true) }
-    tiles.shuffle!
+  #   tiles = []
+  #   (board_size - num_mines).times { tiles << Tile.new(false) }
+  #   num_mines.times { tiles << Tile.new(true) }
+  #   tiles.shuffle!
 
-    grid.each_with_index do |row, row_i|
-      row.each_with_index do |tile, col_i|
-        grid[row_i][col_i] = tiles.pop
-      end
-    end
+  #   grid.each_with_index do |row, row_i|
+  #     row.each_with_index do |tile, col_i|
+  #       grid[row_i][col_i] = tiles.pop
+  #     end
+  #   end
 
-    self.new(grid)
+  #   self.new(grid)
+  # end
+
+  def self.generate_grid(difficulty)
+    dimention = DIFFICULTIES[difficulty][0]
+
+    Array.new(dimention[0]) { Array.new(dimention[1]) }
   end
 
-  def initialize(grid)
-    @grid = grid
+  def initialize(difficulty)
+    @difficulty = DIFFICULTIES[difficulty]
+    @grid = Board.generate_grid(difficulty)
     @bombed_tile = nil
     nil
   end
 
+  def place_mines
+    dimention, num_mines = @difficulty
+    board_size = width * height
+    
+    tiles = generate_tiles(num_mines, true) + generate_tiles(board_size - num_mines, false)
+    fill_grid_with_tiles(tiles.shuffle)
+  end
+
+  def generate_tiles(num, is_bomb)
+    tiles = []
+    num.times { tiles << Tile.new(is_bomb, self) }
+    tiles
+  end
+
+  def fill_grid_with_tiles(tiles)
+    @grid.each_with_index do |row, row_i|
+      row.each_with_index do |tile, col_i|
+        grid[row_i][col_i] = tiles.pop
+      end
+    end
+  end
+  
   def width
     @grid[0].length
   end
