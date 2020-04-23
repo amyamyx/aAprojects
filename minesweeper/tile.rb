@@ -25,6 +25,10 @@ class Tile
   end
 
   def wrong_flag_to_s
-    return "✘".colorize(:red).colorize(background: :white)
+    "✘".colorize(:red).colorize(background: :white)
+  end
+
+  def triggered_bomb_to_s
+    "✸".colorize(:yello).colorize(background: :red)
   end
 end

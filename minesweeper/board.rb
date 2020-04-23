@@ -52,8 +52,14 @@ class Board
       print row_i.to_s + "|"
       
       row.each do |tile|
-        print "#{tile.wrong_flag_to_s}|" if @bombed_tile && !tile.is_bomb && tile.flagged
-        print "#{tile.to_s}|" 
+        if @bombed_tile
+          tile_render = tile.wrong_flag_to_s if !tile.is_bomb && tile.flagged
+          tile.reveal if tile.is_bomb
+          tile_render = tile.triggered_bomb_to_s if tile == @bombed_tile
+        end
+
+        tile_render ||= tile.to_s
+        print "#{tile_render}|" 
       end
       
       puts 

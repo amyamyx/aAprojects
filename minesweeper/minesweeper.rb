@@ -1,7 +1,4 @@
 require_relative "board"
-# require "byebug"
-
-# TODO: complete actions after stepping on a bomb
 
 class Minesweeper
   def initialize(difficulty)
@@ -30,13 +27,17 @@ class Minesweeper
   end
 
   def game_over?
-    solved? || @board.any_bomb_revealed?
+    solved? || lost?
   end
 
   def solved?
     @board.solved?
   end
 
+  def lost?
+    @board.any_bomb_revealed?
+  end
+  
   def get_pos
     pos = nil
 
@@ -97,5 +98,3 @@ class Minesweeper
 
 end
 
-g = Minesweeper.new(:beginner)
-g.run
