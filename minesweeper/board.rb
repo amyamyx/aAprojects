@@ -33,25 +33,25 @@ class Board
     reveal_neighbors(pos)
   end
 
-  def neighbors(pos)
-    positions = []
-    row, col = pos
+  # def neighbors(pos)
+  #   positions = []
+  #   row, col = pos
 
-    -1.upto(1) do |i|
-      -1.upto(1) do |j|
-        next if i == 0 && j == 0
-        new_pos = [row + i, col + j]
-        next if !valid_pos?(new_pos)
-        positions << new_pos
-      end
-    end
+  #   -1.upto(1) do |i|
+  #     -1.upto(1) do |j|
+  #       next if i == 0 && j == 0
+  #       new_pos = [row + i, col + j]
+  #       next if !valid_pos?(new_pos)
+  #       positions << new_pos
+  #     end
+  #   end
 
-    positions
-  end
+  #   positions
+  # end
 
-  def neighbor_bomb_count(pos)
-    neighbors(pos).count { |neighbor_pos| self[neighbor_pos].is_bomb }
-  end
+  # def neighbor_bomb_count(pos)
+  #   neighbors(pos).count { |neighbor_pos| self[neighbor_pos].is_bomb }
+  # end
 
   def reveal_neighbors(pos)
     neighbors(pos).each do |n_pos|
@@ -128,13 +128,19 @@ class Board
     return tile_render
   end
 
-  private
+  
 
   DIFFICULTIES = {
     beginner: [[9, 9], 10],
     intermediate: [[16, 16], 40],
     expert: [[16, 30], 99]
   }
+
+  def valid_pos?(pos)
+    row, col = pos
+    row.between?(0, 8) && col.between?(0, 8)
+  end
+  private
 
   def self.generate_grid(difficulty)
     dimention = DIFFICULTIES[difficulty][0]
@@ -156,9 +162,10 @@ class Board
     end
   end
 
-    def valid_pos?(pos)
-    row, col = pos
-    row.between?(0, 8) && col.between?(0, 8)
+
+
+  def inspect
+    render
   end
 end
 

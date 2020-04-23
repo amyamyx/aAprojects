@@ -34,6 +34,38 @@ class Tile
     "✸".colorize(:yello).colorize(background: :red)
   end
 
-  #adding_board on initialize
+  def neighbors
+    neighbor_tiles = []
+    row_i, col_i = pos
+
+    -1.upto(1).each do |i|
+      -1.upto(1).each do |j|
+        new_pos = [row_i + i, col_i + j]
+        next if !@board.valid_pos?(new_pos)
+        next if new_pos == pos
+        neighbor_tiles << @board[new_pos]
+      end
+    end
+
+    neighbor_tiles
+  end
+
+  def neighbor_bomb_count
+    
+  end
+
+  def pos
+    row_i = @board.grid.map { |row| row.include?(self) }.index(true)
+    col_i = @board.grid[row_i].index(self)
+    [row_i, col_i]
+  end
+
+  def inspect
+    pos
+  end
 
 end
+
+b = Board.new(:beginner)
+b.place_mines
+tile = b[[3,3]]
