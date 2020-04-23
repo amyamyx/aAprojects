@@ -46,16 +46,9 @@ class Board
       print row_i.to_s + "|"
       
       row.each do |tile|
-        print "#{tile_render(tile)}|"
+        print "#{tile.to_s}|"
       end
       puts 
     end
   end
-
-  def tile_render(tile)
-    return "F" if tile.flagged && tile.revealed
-    return "_" if tile.revealed && !tile.is_bomb
-    return " "
-  end
-  
 end

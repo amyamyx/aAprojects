@@ -1,3 +1,5 @@
+require "colorize"
+
 class Tile
   def initialize(is_bomb)
     @is_bomb = is_bomb
@@ -13,5 +15,11 @@ class Tile
 
   def flag
     @flagged = true
+  end
+
+  def to_s
+    return "F" if flagged
+    return " ".colorize(background: :blue) if revealed
+    return " "
   end
 end
