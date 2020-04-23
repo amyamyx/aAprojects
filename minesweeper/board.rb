@@ -1,35 +1,6 @@
 require_relative "tile"
 
 class Board
-  DIFFICULTIES = {
-    beginner: [[9, 9], 10],
-    intermediate: [[16, 16], 40],
-    expert: [[16, 30], 99]
-  }
-  # def self.place_mines(difficulty)
-  #   dimention, num_mines = DIFFICULTIES[difficulty]
-  #   board_size = dimention.inject(:*)
-  #   grid = Array.new(dimention[0]) { Array.new(dimention[1]) }
-
-  #   tiles = []
-  #   (board_size - num_mines).times { tiles << Tile.new(false) }
-  #   num_mines.times { tiles << Tile.new(true) }
-  #   tiles.shuffle!
-
-  #   grid.each_with_index do |row, row_i|
-  #     row.each_with_index do |tile, col_i|
-  #       grid[row_i][col_i] = tiles.pop
-  #     end
-  #   end
-
-  #   self.new(grid)
-  # end
-
-  def self.generate_grid(difficulty)
-    dimention = DIFFICULTIES[difficulty][0]
-
-    Array.new(dimention[0]) { Array.new(dimention[1]) }
-  end
 
   def initialize(difficulty)
     @difficulty = DIFFICULTIES[difficulty]
@@ -46,19 +17,6 @@ class Board
     fill_grid_with_tiles(tiles.shuffle)
   end
 
-  def generate_tiles(num, is_bomb)
-    tiles = []
-    num.times { tiles << Tile.new(is_bomb, self) }
-    tiles
-  end
-
-  def fill_grid_with_tiles(tiles)
-    @grid.each_with_index do |row, row_i|
-      row.each_with_index do |tile, col_i|
-        grid[row_i][col_i] = tiles.pop
-      end
-    end
-  end
   
   def width
     @grid[0].length
@@ -170,7 +128,35 @@ class Board
     return tile_render
   end
 
-  def valid_pos?(pos)
+  private
+
+  DIFFICULTIES = {
+    beginner: [[9, 9], 10],
+    intermediate: [[16, 16], 40],
+    expert: [[16, 30], 99]
+  }
+
+  def self.generate_grid(difficulty)
+    dimention = DIFFICULTIES[difficulty][0]
+
+    Array.new(dimention[0]) { Array.new(dimention[1]) }
+  end
+
+  def generate_tiles(num, is_bomb)
+    tiles = []
+    num.times { tiles << Tile.new(is_bomb, self) }
+    tiles
+  end
+
+  def fill_grid_with_tiles(tiles)
+    @grid.each_with_index do |row, row_i|
+      row.each_with_index do |tile, col_i|
+        grid[row_i][col_i] = tiles.pop
+      end
+    end
+  end
+
+    def valid_pos?(pos)
     row, col = pos
     row.between?(0, 8) && col.between?(0, 8)
   end
