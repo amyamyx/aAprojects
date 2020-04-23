@@ -27,6 +27,7 @@ class Board
 
   def initialize(grid)
     @grid = grid
+    @bombed_tile = nil
   end
 
   def width
@@ -46,11 +47,31 @@ class Board
       print row_i.to_s + "|"
       
       row.each do |tile|
-        print "#{tile.to_s}|"
+        print "#{tile.wrong_flag_to_s}|" if @bombed_tile && !tile.is_bomb && tile.flagged
+        print "#{tile.to_s}|" 
       end
       
       puts 
     end
+  end
+
+  def solved?
+    rows.all? do |row|
+      row.all? do |tile|
+        tile.is_bomb ? tile.flagged : tile.revealed
+      end
+    end
+  end
+
+  def any_bomb_revealed?
+    rows.any? do |row|
+      row.any? { |tile| tile.is_bomb && tile.revealed }
+    end
+  end
+
+  def [](pos)
+    row, col = pos
+    @grid[row][col]
   end
 end
 

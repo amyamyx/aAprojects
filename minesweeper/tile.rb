@@ -13,13 +13,18 @@ class Tile
     @revealed = true
   end
 
-  def flag
-    @flagged = true
+  def toggle_flag
+    @flagged = @flagged ? false : true
   end
 
   def to_s
-    return "⚑".colorize(:red) if flagged
+    return "⚑".colorize(:white) if flagged
+    return "✸".colorize(:white).colorize(background: :red) if revealed && is_bomb
     return " ".colorize(background: :blue) if revealed
     return " "
+  end
+
+  def wrong_flag_to_s
+    return "✘".colorize(:red).colorize(background: :white)
   end
 end
