@@ -28,6 +28,7 @@ class Board
   def initialize(grid)
     @grid = grid
     @bombed_tile = nil
+    nil
   end
 
   def width
@@ -39,29 +40,46 @@ class Board
   end
 
   def reveal(pos)
-    @bombed_tile = self[pos] if self[pos].is_bomb
-    self[pos].reveal
+    tile = self[pos]
+    @bombed_tile = tile if tile.is_bomb
+    tile.reveal
+    reveal_neighbors(pos)
   end
 
   def neighbors(pos)
-    tiles = []
+    positions = []
     row, col = pos
 
     -1.upto(1) do |i|
       -1.upto(1) do |j|
         next if i == 0 && j == 0
-        new_row, new_col = row + i, col + j
-        next if new_row < 0 || new_col < 0
-        neighbor_tile = self[[new_row, new_col]]
-        tiles << neighbor_tile
+        new_pos = [row + i, col + j]
+        next if !valid_pos?(new_pos)
+        positions << new_pos
       end
     end
 
-    tiles
+    positions
   end
 
   def neighbor_bomb_count(pos)
-    neighbors(pos).count { |tile| tile.is_bomb }
+    neighbors(pos).count { |neighbor_pos| self[neighbor_pos].is_bomb }
+  end
+
+  def reveal_neighbors(pos)
+    neighbors(pos).each do |n_pos|
+      tile = self[n_pos]
+      next if tile.revealed
+
+      if !(tile.is_bomb || tile.flagged)
+        tile.reveal 
+      end
+
+      if neighbor_bomb_count(n_pos) == 0
+        reveal_neighbors(n_pos)
+      end
+      
+    end
   end
 
   attr_reader :grid
@@ -72,19 +90,11 @@ class Board
     rows.each_with_index do |row, row_i|
       print row_i.to_s + "|"
       
-      row.each do |tile|
-        if @bombed_tile
-          tile_render = tile.wrong_flag_to_s if !tile.is_bomb && tile.flagged
-          tile.reveal if tile.is_bomb
-          tile_render = tile.triggered_bomb_to_s if tile == @bombed_tile
-        end
-
-        tile_render ||= tile.to_s
-        print "#{tile_render}|" 
-      end
+      row.each_with_index { |tile, col_i| print "#{tile_to_s([row_i, col_i])}|"  }
       
       puts 
     end
+    nil
   end
 
   def solved?
@@ -104,6 +114,36 @@ class Board
   def [](pos)
     row, col = pos
     @grid[row][col]
+  end
+
+  def tile_to_s(pos)
+    tile_render = nil
+    tile = self[pos]
+    bomb_count = neighbor_bomb_count(pos)
+
+    if @bombed_tile
+      tile_render = tile.wrong_flag_to_s if !tile.is_bomb && tile.flagged
+      tile.reveal if tile.is_bomb
+      tile_render = tile.triggered_bomb_to_s if tile == @bombed_tile
+    end
+
+    if tile.revealed
+      if bomb_count > 0
+        tile_render = bomb_count
+      else
+
+      end
+    end
+    
+    tile_render ||= tile.to_s
+
+
+    return tile_render
+  end
+
+  def valid_pos?(pos)
+    row, col = pos
+    row.between?(0, 8) && col.between?(0, 8)
   end
 end
 

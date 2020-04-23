@@ -98,3 +98,5 @@ class Minesweeper
 
 end
 
+g = Minesweeper.new(:beginner)
+g.run
