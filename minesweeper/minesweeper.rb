@@ -1,8 +1,15 @@
 require_relative "board"
 
 class Minesweeper
+
+    DIFFICULTIES = {
+    beginner: {dimention: [10,10], num_mines: 10},
+    intermediate: { dimention: [16, 16], num_mines: 40 },
+    expert: { dimention: [16, 30], num_mines: 99 }
+  }
+
   def initialize(difficulty)
-    @board = Board.new(difficulty)
+    @board = Board.new(DIFFICULTIES[difficulty])
   end
 
   def play_turn
@@ -100,5 +107,5 @@ class Minesweeper
 
 end
 
-g = Minesweeper.new(:beginner)
-g.run
+# g = Minesweeper.new(:beginner)
+# g.run
