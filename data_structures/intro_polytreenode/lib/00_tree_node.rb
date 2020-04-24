@@ -40,10 +40,16 @@ class PolyTreeNode
   end
 
   def remove_self_from_children_list
-    @parent.children.delete(self)
+    @parent._children.delete(self)
   end
 
   def add_self_to_children_list
-    @parent.children << self unless @parent.is_child?(self)
+    @parent._children << self unless @parent.is_child?(self)
+  end
+  
+  protected
+  
+  def _children
+    @children
   end
 end
