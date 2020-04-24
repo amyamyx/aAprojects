@@ -6,6 +6,7 @@ class TestBoard < Board
   def initialize
     @difficulty = { dimention: [9,9], num_mines: 10}
     @grid = Board.generate_grid([9, 9])
+    @num_flags = 0
   end
 
   def render_answer

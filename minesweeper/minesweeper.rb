@@ -2,15 +2,34 @@ require_relative "board"
 
 class Minesweeper
 
-    DIFFICULTIES = {
-    beginner: {dimention: [10,10], num_mines: 10},
-    intermediate: { dimention: [16, 16], num_mines: 40 },
-    expert: { dimention: [16, 30], num_mines: 99 }
+  DIFFICULTIES = {
+    beginner: {
+      dimention: [10, 10],
+      num_mines: 10
+    },
+    intermediate: { 
+      dimention: [16, 16], 
+      num_mines: 40 
+    },
+    expert: { 
+      dimention: [16, 30], 
+      num_mines: 99 
+    }
   }
 
   def initialize(difficulty)
     @board = Board.new(DIFFICULTIES[difficulty])
   end
+
+  def run
+    @board.place_mines 
+    play_turn until game_over?
+    flag_remaining_bombs if solved?
+    display_board
+    display_ending_message
+  end
+  
+  private
 
   def play_turn
     display_board
@@ -18,10 +37,14 @@ class Minesweeper
     pos = get_pos
     action = get_action
 
-    if invalid_action?(pos, action)
-      inform_invalid_action(pos, action) 
+    act_upon(pos, action)
+  end
+
+  def act_upon(*pos_action)
+    if invalid_action?(*pos_action)
+      inform_invalid_action(*pos_action)
     else
-      record_action(pos, action)
+      record_action(*pos_action)
     end
   end
 
@@ -30,13 +53,9 @@ class Minesweeper
     @board.render
   end
 
-  def run
-    @board.place_mines
-    
-    until game_over?
-      play_turn
-    end
-    display_board
+  def display_ending_message
+    puts "YOU WON! GOOD JOB!" if solved?
+    puts "GAME OVER! TRY AGAIN!" if lost?
   end
 
   def game_over?
@@ -48,23 +67,22 @@ class Minesweeper
   end
 
   def lost?
-    @board.any_bomb_revealed?
+    @board.any_triggered_bomb?
   end
   
   def get_pos
     pos = nil
 
     until pos && valid_pos?(pos)
-      puts "please enter a position. Ex. '3,4' > "
+      display_invalid_pos_message if !pos.nil?
+      print "please enter a position. Ex. '3,4' > "
 
       begin
         pos = parse_pos(gets.chomp)
-        valid_pos?(pos)
       rescue
-        puts "Did you type a comma to separate the numbers? Try again"
+        display_invalid_pos_message
         pos = nil
       end
-
     end
 
     pos
@@ -74,14 +92,16 @@ class Minesweeper
     str.split(",").map { |i| Integer(i) }
   end
 
+  def display_invalid_pos_message
+    puts "Did you type a comma to separate the numbers? Try again" 
+  end
+
   def get_action
     action = nil
 
     until [1, 2].include?(action)
       puts "please enter 1 or 2" if !action.nil?
-      puts "Enter '1' to place or remove a flag"
-      puts "Enter '2' to reveal a tile"
-      print "What do you want to do > "
+      print "Enter '1' to place or remove a flag, '2' to reveal a tile >"
       action = gets.chomp[0].to_i
     end
 
@@ -89,24 +109,44 @@ class Minesweeper
   end
 
   def record_action(pos, action)
-    action == 1 ? @board[pos].toggle_flag : @board.reveal(pos)
+    action == 1 ? @board.toggle_flag(pos) : @board.reveal(pos)
   end
 
   def valid_pos?(pos)
-    pos.length == 2 &&
-      pos[0].between?(0, @board.height) &&
-      pos[1].between?(0, @board.width)
+    pos.length == 2 && @board.valid_pos?(pos)
   end
 
   def invalid_action?(pos, action)
-    @board[pos].revealed || 
-      (action == 2 && @board[pos].flagged)
+    revealed_tile?(pos)|| revealing_flag?(pos, action) 
+  end
+
+  def revealed_tile?(pos)
+    @board[pos].revealed
+  end
+
+  def revealing_flag?(pos, action)
+    action == 2 && @board[pos].flagged
   end
 
   def inform_invalid_action(pos, action)
-    puts "You can't flag a revealed tile." if action == 1 && @board[pos].revealed
-    puts "It's been revealed." if action == 2 && @board[pos].revealed
-    puts "You can't reveal a flag!" if action == 2 && @board[pos].flagged
+    puts "You can't flag a revealed tile." if action == 1 && revealed_tile?(pos)
+    puts "It's been revealed." if action == 2 && revealed_tile?(pos)
+    puts "You can't reveal a flag!" if revealing_flag?(pos, action)
   end
 
+  def flag_remaining_bombs
+    @board.flag_all_bombs
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  system("clear")
+  puts "1. Beginner: 10 mines"
+  puts "2. Intermediate: 40 mines"
+  puts "3. Expert: 99 mines"
+  print "Select a level(1-3): "
+  level = gets.chomp[0].to_i
+  levels = { 1 => :beginner, 2 => :intermediate, 3 => :expert }
+  game = Minesweeper.new(levels[level])
+  game.run
 end
