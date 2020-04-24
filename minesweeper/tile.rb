@@ -9,7 +9,7 @@ class Tile
     @flagged = false
   end
 
-  attr_reader :is_bomb, :revealed, :flagged, :board
+  attr_reader :is_bomb, :revealed, :flagged
   
   def reveal
     @revealed = true
@@ -78,9 +78,5 @@ class Tile
     col_i = @board.grid[row_i].index(self)
     [row_i, col_i]
   end
-
-  def inspect
-    pos
-  end
-
+  
 end
