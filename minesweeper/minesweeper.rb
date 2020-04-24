@@ -13,8 +13,8 @@ class Minesweeper
   end
 
   def play_turn
-    system("clear")
-    @board.render
+    display_board
+
     pos = get_pos
     action = get_action
 
@@ -25,14 +25,18 @@ class Minesweeper
     end
   end
 
+  def display_board
+    system("clear")
+    @board.render
+  end
+
   def run
     @board.place_mines
     
     until game_over?
       play_turn
     end
-    system("clear")
-    @board.render
+    display_board
   end
 
   def game_over?
