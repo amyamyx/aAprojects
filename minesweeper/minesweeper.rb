@@ -12,6 +12,17 @@ class Minesweeper
     @board = Board.new(DIFFICULTIES[difficulty])
   end
 
+  def run
+    @board.place_mines
+    
+    until game_over?
+      play_turn
+    end
+    display_board
+  end
+  
+  private
+
   def play_turn
     display_board
 
@@ -28,15 +39,6 @@ class Minesweeper
   def display_board
     system("clear")
     @board.render
-  end
-
-  def run
-    @board.place_mines
-    
-    until game_over?
-      play_turn
-    end
-    display_board
   end
 
   def game_over?
@@ -93,9 +95,7 @@ class Minesweeper
   end
 
   def valid_pos?(pos)
-    pos.length == 2 &&
-      pos[0].between?(0, @board.height) &&
-      pos[1].between?(0, @board.width)
+    pos.length == 2 && @board.valid_pos?(pos)
   end
 
   def invalid_action?(pos, action)

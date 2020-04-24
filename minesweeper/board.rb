@@ -93,9 +93,9 @@ class Board
   end
 
   def valid_pos?(pos)
-    row, col = pos
-    row.between?(0, 8) && col.between?(0, 8)
+    pos.all? { |idx| idx.between?(0, 8) }
   end
+  
   private
 
   def self.generate_grid(dimention)
