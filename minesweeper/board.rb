@@ -54,7 +54,7 @@ class Board
   def solved?
     rows.all? do |row|
       row.all? do |tile|
-        tile.is_bomb ? tile.flagged : tile.revealed
+        tile.is_bomb ? !tile.revealed : tile.revealed
       end
     end
   end
