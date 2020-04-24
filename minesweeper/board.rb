@@ -10,19 +10,14 @@ class Board
   end
 
   def place_mines
-    dimention, num_mines = @difficulty.values
+    num_mines = @difficulty[:num_mines]
     board_size = width * height
-    
-    tiles = generate_tiles(num_mines, true) + generate_tiles(board_size - num_mines, false)
-    fill_grid_with_tiles(tiles.shuffle)
-  end
-  
-  def width
-    @grid[0].length
-  end
 
-  def height
-    @grid.length
+    bomb_tiles = generate_tiles(num_mines, true)
+    regular_tiles = generate_tiles(board_size - num_mines, false)
+
+    tiles =  bomb_tiles + regular_tiles
+    fill_grid_with_tiles(tiles.shuffle)
   end
 
   def reveal(pos)
@@ -78,6 +73,14 @@ class Board
 
   private
 
+  def width
+    @grid[0].length
+  end
+
+  def height
+    @grid.length
+  end
+
   def self.generate_grid(dimention)
     Array.new(dimention[0]) { Array.new(dimention[1]) }
   end
@@ -89,18 +92,13 @@ class Board
   end
 
   def fill_grid_with_tiles(tiles)
-    @grid.each_with_index do |row, row_i|
-      row.each_with_index do |tile, col_i|
+    rows.each_with_index do |row, row_i|
+      row.each_with_index do |col, col_i|
         grid[row_i][col_i] = tiles.pop
       end
     end
   end
 
-
-
-  def inspect
-    render
-  end
 end
 
 
