@@ -21,13 +21,12 @@ class Tile
 
   def to_s
     tile_to_s = " "
+    tile_to_s = "⚑".colorize(:white) if flagged
 
     if revealed && !is_bomb
       tile_to_s = " ".colorize(background: :blue) if neighbor_bomb_count == 0
       tile_to_s = neighbor_bomb_count
     end
-
-    tile_to_s = "⚑".colorize(:white) if flagged
 
     if board.bombed_tile
       tile_to_s = wrong_flag_to_s if !is_bomb && flagged
@@ -68,9 +67,7 @@ class Tile
 
   def reveal_neighbors
     neighbors.each do |tile|
-      next if tile.revealed
-      next if tile.is_bomb
-      next if tile.flagged
+      next if tile.revealed || tile.is_bomb || tile.flagged
       tile.reveal
       tile.reveal_neighbors if tile.neighbor_bomb_count == 0
     end
