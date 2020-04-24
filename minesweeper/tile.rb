@@ -37,6 +37,20 @@ class Tile
     tile_to_s
   end
 
+  def neighbor_bomb_count
+    neighbors.count { |tile| tile.is_bomb }
+  end
+
+  def reveal_neighbors
+    neighbors.each do |tile|
+      next if tile.revealed || tile.is_bomb || tile.flagged
+      tile.reveal
+      tile.reveal_neighbors if tile.neighbor_bomb_count == 0
+    end
+  end  
+
+  private
+
   def wrong_flag_to_s
     "✘".colorize(:red).colorize(background: :white)
   end
@@ -61,22 +75,12 @@ class Tile
     neighbor_tiles
   end
 
-  def neighbor_bomb_count
-    neighbors.count { |tile| tile.is_bomb }
-  end
 
-  def reveal_neighbors
-    neighbors.each do |tile|
-      next if tile.revealed || tile.is_bomb || tile.flagged
-      tile.reveal
-      tile.reveal_neighbors if tile.neighbor_bomb_count == 0
-    end
-  end
 
   def pos
     row_i = @board.grid.map { |row| row.include?(self) }.index(true)
     col_i = @board.grid[row_i].index(self)
     [row_i, col_i]
   end
-  
+
 end
