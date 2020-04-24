@@ -138,3 +138,15 @@ class Minesweeper
     @board.flag_all_bombs
   end
 end
+
+if __FILE__ == $PROGRAM_NAME
+  system("clear")
+  puts "1. Beginner: 10 mines"
+  puts "2. Intermediate: 40 mines"
+  puts "3. Expert: 99 mines"
+  print "Select a level(1-3): "
+  level = gets.chomp[0].to_i
+  levels = { 1 => :beginner, 2 => :intermediate, 3 => :expert }
+  game = Minesweeper.new(levels[level])
+  game.run
+end
