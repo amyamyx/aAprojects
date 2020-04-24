@@ -13,11 +13,8 @@ class Minesweeper
   end
 
   def run
-    @board.place_mines
-    
-    until game_over?
-      play_turn
-    end
+    @board.place_mines 
+    play_turn until game_over?
     display_board
   end
   
@@ -81,9 +78,7 @@ class Minesweeper
 
     until [1, 2].include?(action)
       puts "please enter 1 or 2" if !action.nil?
-      puts "Enter '1' to place or remove a flag"
-      puts "Enter '2' to reveal a tile"
-      print "What do you want to do > "
+      print "Enter '1' to place or remove a flag, '2' to reveal a tile >"
       action = gets.chomp[0].to_i
     end
 
