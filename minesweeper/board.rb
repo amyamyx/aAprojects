@@ -16,7 +16,6 @@ class Board
     tiles = generate_tiles(num_mines, true) + generate_tiles(board_size - num_mines, false)
     fill_grid_with_tiles(tiles.shuffle)
   end
-
   
   def width
     @grid[0].length
@@ -97,7 +96,8 @@ class Board
   end
 
   def valid_pos?(pos)
-    pos.all? { |idx| idx.between?(0, 8) }
+    row, col = pos
+    row.between?(0, height - 1) && col.between?(0, width - 1)
   end
 
   private
