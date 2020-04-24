@@ -26,6 +26,7 @@ class Minesweeper
     play_turn until game_over?
     flag_remaining_bombs if solved?
     display_board
+    display_ending_message
   end
   
   private
@@ -50,6 +51,11 @@ class Minesweeper
   def display_board
     system("clear")
     @board.render
+  end
+
+  def display_ending_message
+    puts "YOU WON! GOOD JOB!" if solved?
+    puts "GAME OVER! TRY AGAIN!" if lost?
   end
 
   def game_over?
