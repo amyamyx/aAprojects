@@ -60,7 +60,7 @@ class Minesweeper
   end
 
   def lost?
-    @board.any_bomb_revealed?
+    @board.any_triggered_bomb?
   end
   
   def get_pos

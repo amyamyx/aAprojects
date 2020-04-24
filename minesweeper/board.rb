@@ -62,10 +62,8 @@ class Board
     end
   end
 
-  def any_bomb_revealed?
-    rows.any? do |row|
-      row.any? { |tile| tile.is_bomb && tile.revealed }
-    end
+  def any_triggered_bomb?
+    !@bombed_tile.nil?
   end
 
   def [](pos)
