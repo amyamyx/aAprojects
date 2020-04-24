@@ -29,22 +29,25 @@ class Board
     tile = self[pos]
     @bombed_tile = tile if tile.is_bomb
     tile.reveal
-    tile.reveal_neighbors if tile.neighbor_bomb_count == 0
+    tile.reveal_neighbors if tile.neighbor_bomb_count == 0 && @bombed_tile.nil?
   end
   
   def toggle_flag(pos)
     self[pos].toggle_flag
   end
 
-  attr_reader :grid
+  attr_reader :grid, :bombed_tile
   alias_method :rows, :grid
 
   def render
     puts "  " + (0...width).to_a.join(" ")
     rows.each_with_index do |row, row_i|
       print row_i.to_s + "|"
-      
-      row.each_with_index { |tile, col_i| print "#{tile_to_s([row_i, col_i])}|"  }
+
+      row.each do |tile|
+        tile.reveal if @bombed_tile && tile.is_bomb
+        print "#{tile.to_s}|"
+      end
       
       puts 
     end
@@ -68,31 +71,6 @@ class Board
   def [](pos)
     row, col = pos
     @grid[row][col]
-  end
-
-  def tile_to_s(pos)
-    tile_render = nil
-    tile = self[pos]
-    bomb_count = tile.neighbor_bomb_count
-
-    if @bombed_tile
-      tile_render = tile.wrong_flag_to_s if !tile.is_bomb && tile.flagged
-      tile.reveal if tile.is_bomb
-      tile_render = tile.triggered_bomb_to_s if tile == @bombed_tile
-    end
-
-    if tile.revealed && !tile.is_bomb
-      if bomb_count > 0
-        tile_render = bomb_count
-      else
-        
-      end
-    end
-    
-    tile_render ||= tile.to_s
-
-
-    return tile_render
   end
 
   def valid_pos?(pos)

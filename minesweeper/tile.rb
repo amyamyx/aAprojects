@@ -20,10 +20,22 @@ class Tile
   end
 
   def to_s
-    return "⚑".colorize(:white) if flagged
-    return "✸".colorize(:white).colorize(background: :red) if revealed && is_bomb
-    return " ".colorize(background: :blue) if revealed
-    return " "
+    tile_to_s = " "
+
+    if revealed && !is_bomb
+      tile_to_s = " ".colorize(background: :blue) if neighbor_bomb_count == 0
+      tile_to_s = neighbor_bomb_count
+    end
+
+    tile_to_s = "⚑".colorize(:white) if flagged
+
+    if board.bombed_tile
+      tile_to_s = wrong_flag_to_s if !is_bomb && flagged
+      tile_to_s = "✸".colorize(:white).colorize(background: :red) if is_bomb
+      tile_to_s = triggered_bomb_to_s if self == board.bombed_tile
+    end
+
+    tile_to_s
   end
 
   def wrong_flag_to_s
