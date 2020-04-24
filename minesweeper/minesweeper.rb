@@ -2,10 +2,19 @@ require_relative "board"
 
 class Minesweeper
 
-    DIFFICULTIES = {
-    beginner: {dimention: [10,10], num_mines: 10},
-    intermediate: { dimention: [16, 16], num_mines: 40 },
-    expert: { dimention: [16, 30], num_mines: 99 }
+  DIFFICULTIES = {
+    beginner: {
+      dimention: [10, 10],
+      num_mines: 10
+    },
+    intermediate: { 
+      dimention: [16, 16], 
+      num_mines: 40 
+    },
+    expert: { 
+      dimention: [16, 30], 
+      num_mines: 99 
+    }
   }
 
   def initialize(difficulty)
