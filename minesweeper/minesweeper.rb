@@ -26,10 +26,14 @@ class Minesweeper
     pos = get_pos
     action = get_action
 
-    if invalid_action?(pos, action)
-      inform_invalid_action(pos, action) 
+    act_upon(pos, action)
+  end
+
+  def act_upon(*pos_action)
+    if invalid_action?(*pos_action)
+      inform_invalid_action(*pos_action)
     else
-      record_action(pos, action)
+      record_action(*pos_action)
     end
   end
 
