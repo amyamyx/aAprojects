@@ -54,13 +54,13 @@ class Tile
     neighbors.count { |tile| tile.is_bomb }
   end
 
-  def reveal_neighbor
+  def reveal_neighbors
     neighbors.each do |tile|
       next if tile.revealed
       next if tile.is_bomb
       next if tile.flagged
       tile.reveal
-      tile.reveal_neighbor if tile.neighbor_bomb_count == 0
+      tile.reveal_neighbors if tile.neighbor_bomb_count == 0
     end
   end
 
@@ -75,7 +75,3 @@ class Tile
   end
 
 end
-
-b = Board.new(:beginner)
-b.place_mines
-tile = b[[3,3]]

@@ -70,7 +70,7 @@ class Board
   def tile_to_s(pos)
     tile_render = nil
     tile = self[pos]
-    bomb_count = neighbor_bomb_count(pos)
+    bomb_count = tile.neighbor_bomb_count
 
     if @bombed_tile
       tile_render = tile.wrong_flag_to_s if !tile.is_bomb && tile.flagged
@@ -78,11 +78,11 @@ class Board
       tile_render = tile.triggered_bomb_to_s if tile == @bombed_tile
     end
 
-    if tile.revealed
+    if tile.revealed && !tile.is_bomb
       if bomb_count > 0
         tile_render = bomb_count
       else
-
+        
       end
     end
     
