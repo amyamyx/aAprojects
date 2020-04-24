@@ -9,7 +9,8 @@ class Tile
     @flagged = false
   end
 
-  attr_reader :is_bomb, :revealed, :flagged
+  attr_reader :is_bomb, :revealed
+  attr_accessor :flagged
   
   def reveal
     @revealed = true
@@ -24,14 +25,14 @@ class Tile
     tile_to_s = "⚑".colorize(:white) if flagged
 
     if revealed && !is_bomb
-      tile_to_s = " ".colorize(background: :blue) if neighbor_bomb_count == 0
       tile_to_s = neighbor_bomb_count
+      tile_to_s = " ".colorize(background: :blue) if neighbor_bomb_count == 0
     end
 
-    if board.bombed_tile
+    if @board.bombed_tile
       tile_to_s = wrong_flag_to_s if !is_bomb && flagged
       tile_to_s = "✸".colorize(:white).colorize(background: :red) if is_bomb
-      tile_to_s = triggered_bomb_to_s if self == board.bombed_tile
+      tile_to_s = triggered_bomb_to_s if self == @board.bombed_tile
     end
 
     tile_to_s

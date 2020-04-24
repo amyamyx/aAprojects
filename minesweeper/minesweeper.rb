@@ -24,6 +24,7 @@ class Minesweeper
   def run
     @board.place_mines 
     play_turn until game_over?
+    flag_remaining_bombs if solved?
     display_board
   end
   
@@ -127,4 +128,7 @@ class Minesweeper
     puts "You can't reveal a flag!" if revealing_flag?(pos, action)
   end
 
+  def flag_remaining_bombs
+    @board.flag_all_bombs
+  end
 end
