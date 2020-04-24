@@ -6,7 +6,7 @@ class Board
     @difficulty = difficulty
     @grid = Board.generate_grid(difficulty[:dimention])
     @bombed_tile = nil
-    nil
+    @num_flags = 0
   end
 
   def place_mines
@@ -28,6 +28,13 @@ class Board
   end
   
   def toggle_flag(pos)
+    tile = self[pos]
+    if tile.flagged
+      @num_flags -= 1
+    else
+      @num_flags += 1
+    end
+
     self[pos].toggle_flag
   end
 
@@ -46,6 +53,7 @@ class Board
       
       puts 
     end
+    puts "Number of flags: #{@num_flags} ⚑"
     nil
   end
 
