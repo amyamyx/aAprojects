@@ -94,14 +94,21 @@ class Minesweeper
   end
 
   def invalid_action?(pos, action)
-    @board[pos].revealed || 
-      (action == 2 && @board[pos].flagged)
+    revealed_tile?(pos)|| revealing_flag?(pos, action) 
+  end
+
+  def revealed_tile?(pos)
+    @board[pos].revealed
+  end
+
+  def revealing_flag?(pos, action)
+    action == 2 && @board[pos].flagged
   end
 
   def inform_invalid_action(pos, action)
-    puts "You can't flag a revealed tile." if action == 1 && @board[pos].revealed
-    puts "It's been revealed." if action == 2 && @board[pos].revealed
-    puts "You can't reveal a flag!" if action == 2 && @board[pos].flagged
+    puts "You can't flag a revealed tile." if action == 1 && revealed_tile?(pos)
+    puts "It's been revealed." if action == 2 && revealed_tile?(pos)
+    puts "You can't reveal a flag!" if revealing_flag?(pos, action)
   end
 
 end
