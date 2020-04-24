@@ -1,13 +1,20 @@
 require_relative "board"
 
 class Minesweeper
+
+    DIFFICULTIES = {
+    beginner: {dimention: [10,10], num_mines: 10},
+    intermediate: { dimention: [16, 16], num_mines: 40 },
+    expert: { dimention: [16, 30], num_mines: 99 }
+  }
+
   def initialize(difficulty)
-    @board = Board.place_mines(difficulty)
+    @board = Board.new(DIFFICULTIES[difficulty])
   end
 
   def play_turn
-    system("clear")
-    @board.render
+    display_board
+
     pos = get_pos
     action = get_action
 
@@ -18,12 +25,18 @@ class Minesweeper
     end
   end
 
+  def display_board
+    system("clear")
+    @board.render
+  end
+
   def run
+    @board.place_mines
+    
     until game_over?
       play_turn
     end
-    system("clear")
-    @board.render
+    display_board
   end
 
   def game_over?
@@ -97,6 +110,3 @@ class Minesweeper
   end
 
 end
-
-g = Minesweeper.new(:beginner)
-g.run
