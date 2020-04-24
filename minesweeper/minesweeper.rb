@@ -67,16 +67,15 @@ class Minesweeper
     pos = nil
 
     until pos && valid_pos?(pos)
-      puts "please enter a position. Ex. '3,4' > "
+      display_invalid_pos_message if !pos.nil?
+      print "please enter a position. Ex. '3,4' > "
 
       begin
         pos = parse_pos(gets.chomp)
-        valid_pos?(pos)
       rescue
-        puts "Did you type a comma to separate the numbers? Try again"
+        display_invalid_pos_message
         pos = nil
       end
-
     end
 
     pos
@@ -84,6 +83,10 @@ class Minesweeper
 
   def parse_pos(str)
     str.split(",").map { |i| Integer(i) }
+  end
+
+  def display_invalid_pos_message
+    puts "Did you type a comma to separate the numbers? Try again" 
   end
 
   def get_action
