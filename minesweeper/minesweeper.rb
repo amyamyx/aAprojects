@@ -86,7 +86,7 @@ class Minesweeper
   end
 
   def record_action(pos, action)
-    action == 1 ? @board[pos].toggle_flag : @board.reveal(pos)
+    action == 1 ? @board.toggle_flag(pos) : @board.reveal(pos)
   end
 
   def valid_pos?(pos)

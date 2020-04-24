@@ -33,6 +33,10 @@ class Board
     tile.reveal_neighbors if tile.neighbor_bomb_count == 0
   end
   
+  def toggle_flag(pos)
+    self[pos].toggle_flag
+  end
+
   attr_reader :grid
   alias_method :rows, :grid
 
