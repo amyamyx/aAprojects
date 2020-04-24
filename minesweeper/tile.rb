@@ -75,8 +75,6 @@ class Tile
     neighbor_tiles
   end
 
-
-
   def pos
     row_i = @board.grid.map { |row| row.include?(self) }.index(true)
     col_i = @board.grid[row_i].index(self)
