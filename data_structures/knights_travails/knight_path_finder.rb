@@ -60,4 +60,8 @@ class KnightPathFinder
   def self.valid_pos?(pos)
     pos.all? { |dimension| dimension.between?(0, 7) }
   end
+
+  def inspect
+    "#<KnightPathFinder:#{object_id}>"
+  end
 end
