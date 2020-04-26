@@ -1,4 +1,4 @@
-require_relative "poly_tree_node"
+require_relative "../intro_polytreenode/lib/00_tree_node"
 class KnightPathFinder
 
   def self.valid_moves(pos)
