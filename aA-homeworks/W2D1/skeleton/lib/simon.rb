@@ -17,7 +17,6 @@ class Simon
 
   def take_turn
     show_sequence
-    # p @seq
     require_sequence
     if !game_over
       round_success_message
