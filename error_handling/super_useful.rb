@@ -1,9 +1,14 @@
 # PHASE 2
 def convert_to_int(str)
-  Integer(str)  
-rescue ArgumentError => e 
-  puts e
-  nil
+  begin
+    num = Integer(str)  
+  rescue ArgumentError => e 
+    puts e
+  ensure
+    num ||= 0
+  end
+  
+num
 end
 
 
@@ -53,7 +58,7 @@ class BestFriend
     raise "name can't be empty" if name.length <= 0
     raise "yrs_known can't be at least 5" if yrs_known < 5
     raise "fav_pastime can't be empty" if fav_pastime.lenghth <= 0
-    
+
     @name = name
     @yrs_known = yrs_known
     @fav_pastime = fav_pastime
