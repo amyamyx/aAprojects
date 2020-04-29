@@ -26,9 +26,9 @@ module Slideable
     move_dirs.each do |move|
       dx, dy = move
       new_pos = grow_unblocked_moves_in_dir(dx, dy)
-      
+
       while @board.valid_pos?(new_pos) && @board[new_pos].empty?
-        positions << new_pos
+        positions << new_pos if @board[new_pos].color != @color
         dx += move[0]
         dy += move[1]
         new_pos = grow_unblocked_moves_in_dir(dx, dy)
