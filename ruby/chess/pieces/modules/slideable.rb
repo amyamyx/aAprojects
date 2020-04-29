@@ -24,10 +24,14 @@ module Slideable
   def moves
     positions = []
     move_dirs.each do |move|
-      new_pos = @pos.map_with_index { |i, idx| i + move[idx] }
-      while @board.valid_pos?(new_pos)
+      dx, dy = move
+      new_pos = grow_unblocked_moves_in_dir(dx, dy)
+      
+      while @board.valid_pos?(new_pos) && @board[new_pos].empty?
         positions << new_pos
-        new_pos = new_pos.map_with_index { |i, idx| i + move[idx]}
+        dx += move[0]
+        dy += move[1]
+        new_pos = grow_unblocked_moves_in_dir(dx, dy)
       end
     end
 
@@ -40,5 +44,7 @@ module Slideable
   end
 
   def grow_unblocked_moves_in_dir(dx, dy)
+    row, col = @pos
+    [row + dx, col + dy]
   end
 end
