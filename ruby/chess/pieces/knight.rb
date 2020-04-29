@@ -1,7 +1,7 @@
 require_relative "piece"
 require_relative "modules/stepable"
 
-class Rook < Piece
+class Knight < Piece
 
   include Stepable
 
