@@ -38,4 +38,7 @@ module Slideable
     
     positions
   end
+
+  def grow_unblocked_moves_in_dir(dx, dy)
+  end
 end
