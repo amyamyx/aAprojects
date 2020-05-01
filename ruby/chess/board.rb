@@ -40,17 +40,6 @@ class Board
   def valid_pos?(pos)
     pos.all? { |i| i.between?(0, 7) }
   end
-  
-  def render
-    puts "  " + (0..7).to_a.join("  ")
-    @rows.each_with_index do |row, row_i|
-      print row_i.to_s + "|"
-      print row.map(&:to_s).join(" |")
-      puts " |"
-      puts " -------------------------"
-    end
-    nil
-  end
 
   private
 
