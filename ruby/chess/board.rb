@@ -41,9 +41,33 @@ class Board
     pos.all? { |i| i.between?(0, 7) }
   end
 
+  def in_check?(color)
+    king_pos = find_king_pos(color)
+    @rows.each do |row|
+      row.each do |piece|
+        next if piece.color == color || piece.is_a?(NullPiece)
+        return true if piece.moves.include?(king_pos)
+      end
+    end
+
+    false
+  end
+
   private
 
-    def place_pieces
+  def find_king_pos(color)
+    @rows.each_with_index do |row, row_i|
+      row.each_with_index do |piece, col_i|
+        if piece.is_a?(King) && piece.color == color
+          king_pos = [row_i, col_i]
+        end
+      end
+    end
+
+    king_pos
+  end
+
+  def place_pieces
     @rows.each_with_index do |row, row_i|
       color = row_i < 2 ? :red : :blue
       if row_i == 1 || row_i == 6
