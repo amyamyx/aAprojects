@@ -8,6 +8,10 @@ class Piece
     @pos = pos
   end
 
+  def empty?
+    false
+  end
+  
   def moves
   end
   
