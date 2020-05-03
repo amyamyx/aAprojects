@@ -60,12 +60,13 @@ class Board
 
   def dup
     dup_rows = Array.new(8) { Array.new(8, NullPiece.instance) }
+    dup_board = Board.new(dup_rows)
     pieces.each do |piece|
       row, col = piece.pos
-      dup_rows[row][col] = piece
+      dup_rows[row][col] = piece.class.new(piece.color, dup_board, peice.pos)
     end
 
-    Board.new(dup_rows)
+    dup_board
   end
 
   private
