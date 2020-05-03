@@ -43,28 +43,36 @@ class Board
 
   def in_check?(color)
     king_pos = find_king_pos(color)
-    @rows.each do |row|
-      row.each do |piece|
-        next if piece.color == color || piece.is_a?(NullPiece)
-        return true if piece.moves.include?(king_pos)
-      end
-    end
 
-    false
+    pieces.any? do |piece|
+      pieces.moves.include?(king_pos)
+    end
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    pieces.select { |piece| piece.color == color }.all? do |piece|
+      piece.valid_moves.empty?
+    end
   end
 
   private
 
-  def find_king_pos(color)
-    @rows.each_with_index do |row, row_i|
-      row.each_with_index do |piece, col_i|
-        if piece.is_a?(King) && piece.color == color
-          king_pos = [row_i, col_i]
-        end
+  def pieces 
+    result = []
+    @rows.each do |row|
+      row.each do |piece|
+        result << piece unless piece.is_a?(NullPiece)
       end
     end
 
-    king_pos
+    result
+  end
+
+  def find_king_pos(color)
+    king = pieces.select { |piece| piece.is_a?(King) && piece.color == color }.first
+    king.pos
   end
 
   def place_pieces
