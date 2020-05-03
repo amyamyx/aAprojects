@@ -26,14 +26,18 @@ class Board
     @rows[row][col] = val
   end
 
+  def move_piece(start_pos, end_pos)
+    moving_piece = self[start_pos]
+    
+    raise "There's no piece here" if moving_piece.is_a?(NullPiece)
+    raise "Invalid pos" if !valid_pos?(end_pos)
+    raise "You can't move here" if self[end_pos].color == moving_piece.color
+    move_piece!(start_pos, end_pos) if moving_piece.valid_moves.include?(end_pos)
+  end
+  
   def move_piece!(start_pos, end_pos) 
     moving_piece = self[start_pos]
-
-    raise "There's no piece here" if moving_piece.nil?
-    raise "Invalid pos" if !valid_pos?(end_pos)
-    raise "You can't move here" if self[end_pos] != NullPiece.instance
     moving_piece.pos = end_pos
-
     self[start_pos], self[end_pos] = self[end_pos], moving_piece
   end
 
