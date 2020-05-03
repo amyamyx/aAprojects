@@ -8,10 +8,10 @@ require_relative "pieces/null_piece"
 
 class Board
 
-  def initialize
-    @rows = Array.new(8) { Array.new(8) }
+  def initialize(rows = nil)
+    @rows = rows
 
-    place_pieces
+    place_pieces if rows.nil?
   end
   
   attr_reader :rows
@@ -26,14 +26,18 @@ class Board
     @rows[row][col] = val
   end
 
+  def move_piece(start_pos, end_pos)
+    moving_piece = self[start_pos]
+    
+    raise "There's no piece here" if moving_piece.is_a?(NullPiece)
+    raise "Invalid pos" if !valid_pos?(end_pos)
+    raise "You can't move here" if self[end_pos].color == moving_piece.color
+    move_piece!(start_pos, end_pos) if moving_piece.valid_moves.include?(end_pos)
+  end
+  
   def move_piece!(start_pos, end_pos) 
     moving_piece = self[start_pos]
-
-    raise "There's no piece here" if moving_piece.nil?
-    raise "Invalid pos" if !valid_pos?(end_pos)
-    raise "You can't move here" if self[end_pos] != NullPiece.instance
     moving_piece.pos = end_pos
-
     self[start_pos], self[end_pos] = self[end_pos], moving_piece
   end
 
@@ -57,6 +61,18 @@ class Board
     end
   end
 
+
+  def dup
+    dup_rows = Array.new(8) { Array.new(8, NullPiece.instance) }
+    dup_board = Board.new(dup_rows)
+    pieces.each do |piece|
+      row, col = piece.pos
+      dup_rows[row][col] = piece.class.new(piece.color, dup_board, peice.pos)
+    end
+
+    dup_board
+  end
+
   private
 
   def pieces 
@@ -76,6 +92,7 @@ class Board
   end
 
   def place_pieces
+    @rows = Array.new(8) { Array.new(8) }
     @rows.each_with_index do |row, row_i|
       color = row_i < 2 ? :red : :blue
       if row_i == 1 || row_i == 6
