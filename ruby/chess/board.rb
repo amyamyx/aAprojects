@@ -8,10 +8,10 @@ require_relative "pieces/null_piece"
 
 class Board
 
-  def initialize
-    @rows = Array.new(8) { Array.new(8) }
+  def initialize(rows = nil)
+    @rows = rows
 
-    place_pieces
+    place_pieces if rows.nil?
   end
   
   attr_reader :rows
@@ -57,6 +57,17 @@ class Board
     end
   end
 
+
+  def dup
+    dup_rows = Array.new(8) { Array.new(8, NullPiece.instance) }
+    pieces.each do |piece|
+      row, col = piece.pos
+      dup_rows[row][col] = piece
+    end
+
+    Board.new(dup_rows)
+  end
+
   private
 
   def pieces 
@@ -76,6 +87,7 @@ class Board
   end
 
   def place_pieces
+    @rows = Array.new(8) { Array.new(8) }
     @rows.each_with_index do |row, row_i|
       color = row_i < 2 ? :red : :blue
       if row_i == 1 || row_i == 6
