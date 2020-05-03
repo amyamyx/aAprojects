@@ -7,6 +7,8 @@ class Display
     @cursor = Cursor.new([0, 0], board)
   end
 
+  attr_reader :board
+
   def render
     puts "  " + (0..7).to_a.join("  ")
     @board.rows.each_with_index do |row, row_i|
