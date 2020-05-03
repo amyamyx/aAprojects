@@ -32,9 +32,9 @@ class Board
     raise "There's no piece here" if moving_piece.nil?
     raise "Invalid pos" if !valid_pos?(end_pos)
     raise "You can't move here" if self[end_pos] != NullPiece.instance
+    moving_piece.pos = end_pos
 
     self[start_pos], self[end_pos] = self[end_pos], moving_piece
-    render
   end
 
   def valid_pos?(pos)
@@ -45,7 +45,7 @@ class Board
     king_pos = find_king_pos(color)
 
     pieces.any? do |piece|
-      pieces.moves.include?(king_pos)
+      piece.moves.include?(king_pos)
     end
   end
 
