@@ -8,6 +8,10 @@ class NullPiece < Piece
 
   def initialize
   end
+  
+  def empty?
+    true
+  end
 
   def move
   end

@@ -32,18 +32,50 @@ class Board
     raise "There's no piece here" if moving_piece.nil?
     raise "Invalid pos" if !valid_pos?(end_pos)
     raise "You can't move here" if self[end_pos] != NullPiece.instance
+    moving_piece.pos = end_pos
 
     self[start_pos], self[end_pos] = self[end_pos], moving_piece
-    render
   end
 
   def valid_pos?(pos)
     pos.all? { |i| i.between?(0, 7) }
   end
 
+  def in_check?(color)
+    king_pos = find_king_pos(color)
+
+    pieces.any? do |piece|
+      piece.moves.include?(king_pos)
+    end
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    pieces.select { |piece| piece.color == color }.all? do |piece|
+      piece.valid_moves.empty?
+    end
+  end
+
   private
 
-    def place_pieces
+  def pieces 
+    result = []
+    @rows.each do |row|
+      row.each do |piece|
+        result << piece unless piece.is_a?(NullPiece)
+      end
+    end
+
+    result
+  end
+
+  def find_king_pos(color)
+    king = pieces.select { |piece| piece.is_a?(King) && piece.color == color }.first
+    king.pos
+  end
+
+  def place_pieces
     @rows.each_with_index do |row, row_i|
       color = row_i < 2 ? :red : :blue
       if row_i == 1 || row_i == 6

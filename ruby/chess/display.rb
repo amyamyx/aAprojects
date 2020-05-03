@@ -7,6 +7,8 @@ class Display
     @cursor = Cursor.new([0, 0], board)
   end
 
+  attr_reader :board
+
   def render
     puts "  " + (0..7).to_a.join("  ")
     @board.rows.each_with_index do |row, row_i|
@@ -14,10 +16,11 @@ class Display
       row.map(&:to_s).each_with_index do |piece, col_i|
         if [row_i, col_i] == @cursor.cursor_pos
           print (piece + " ").colorize(background: :white) + "|"
+        else
+          print piece + " |"
         end
-        print piece + " |"
       end
-      puts " |"
+      puts 
       puts " -------------------------"
     end
     nil
