@@ -20,14 +20,18 @@ class HumanPlayer < Player
   end
 
   def get_pos
-    system("clear")
-    @display.render
+    display_board_and_message
     pos = @cursor.get_input
     while pos.nil?
-      system("clear")
-      @display.render
+      display_board_and_message
       pos = @cursor.get_input 
     end
     pos
+  end
+
+  def display_board_and_message
+    system("clear")
+    puts "#{@color}'s turn"
+    @display.render
   end
 end
