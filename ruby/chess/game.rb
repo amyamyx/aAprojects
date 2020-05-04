@@ -17,7 +17,7 @@ class Game
   def play
     until over?
       notify_players
-      @current_player.make_move(@board)
+      make_move
       swap_turn!
     end
   end
@@ -25,6 +25,7 @@ class Game
   private
 
   def notify_players
+    puts "#{@current_player.color.to_s}'s turn"
   end
 
   def swap_turn!
@@ -35,6 +36,10 @@ class Game
     # TODO: @board.tie? and @board.win?
 
     # @board.tie? || @board.win?
+  end
+
+  def make_move
+    @current_player.make_move(@board)
   end
 
 end
