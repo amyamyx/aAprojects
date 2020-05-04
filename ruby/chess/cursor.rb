@@ -82,11 +82,18 @@ class Cursor
 
   def handle_key(key)
     case key
-    when :return || :case
+    when :return
       @cursor_pos
-    when :left || :right || :up || :down
+    when :space
+      @cursor_pos
+    when :left
       update_pos(MOVES[key])
-      nil
+    when :right
+      update_pos(MOVES[key])
+    when :down
+      update_pos(MOVES[key])
+    when :up
+      update_pos(MOVES[key])
     when :ctrl_c
       Process.exit(0)
     end
@@ -99,5 +106,6 @@ class Cursor
     new_col = (col + d_col) % 8
 
     @cursor_pos = [new_row, new_col]
+    nil
   end
 end
