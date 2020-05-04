@@ -67,7 +67,7 @@ class Board
     dup_board = Board.new(dup_rows)
     pieces.each do |piece|
       row, col = piece.pos
-      dup_rows[row][col] = piece.class.new(piece.color, dup_board, peice.pos)
+      dup_rows[row][col] = piece.class.new(piece.color, dup_board, piece.pos)
     end
 
     dup_board
