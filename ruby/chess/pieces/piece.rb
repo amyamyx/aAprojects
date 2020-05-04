@@ -1,12 +1,13 @@
 require "colorize"
 
 class Piece
-  attr_reader :color
+  attr_reader :color, :selected
   attr_accessor :pos
   def initialize(color, board, pos)
     @color = color
     @board = board
     @pos = pos
+    @selected = false
   end
 
   def empty?
@@ -27,6 +28,10 @@ class Piece
   end
   
   def symbol
+  end
+
+  def toggle_selected
+    @selected = !@selected
   end
 
   def to_s
