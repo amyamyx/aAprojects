@@ -36,3 +36,15 @@ def my_transpose(arr)
 
   transposed
 end
+
+def stock_picker(prices)
+  best_pair = [0, 1]
+  best_profit = profit(prices, best_pair)
+
+  
+end
+
+def profit(prices, pair)
+  buy, sell = pair
+  prices[sell] - prices[buy]
+end

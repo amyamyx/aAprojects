@@ -60,3 +60,10 @@ describe "#my_transpose" do
     expect(my_transpose(arr3)).to eq(arr4)
   end
 end
+
+describe "#stock_picker" do
+  prices = [20, 19, 18, 9, 10, 12, 17, 2]
+  it "should return the indices representing the most profitable days of buying and selling" do
+    expect(stock_picker(prices)).to eq([3, 6])
+  end
+end
