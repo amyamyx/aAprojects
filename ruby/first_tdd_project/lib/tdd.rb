@@ -43,17 +43,10 @@ def stock_picker(stock)
   return nil if stock.reverse == stock.sort
   return [min_idx, max_idx] if min_idx < max_idx
   
-
-  best_profit = 0
-
-  stock_before_max = stock[0..max_idx]
-  stock_in_between = stock[max_idx + 1...min_idx]
-  stock_after_min = stock[min_idx..-1]
-  
   sections = [
-    stock_before_max,
-    stock_in_between,
-    stock_after_min
+    stock[0..max_idx],
+    stock[max_idx + 1...min_idx],
+    stock[min_idx..-1]
   ]
 
   profits = sections.map { |section| profit(section) }
