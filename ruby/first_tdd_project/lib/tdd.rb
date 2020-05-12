@@ -37,26 +37,49 @@ def my_transpose(arr)
   transposed
 end
 
-def stock_picker(prices)
-  min_idx = nil
+def stock_picker(stock)
+  min_idx, max_idx = find_min_max_index(stock)
+  return nil if min_idx == max_idx || stock.empty?
+  return [min_idx, max_idx] if min_idx < max_idx
 
-  fence = prices.length
+  best_profit = 0
 
-  until min_idx || fence == 0
-    part_prices = prices[0...fence]
-    min_idx = part_prices.index(part_prices.min)
-    if min_idx == fence - 1
-      min_idx = nil
-      fence -= 1
-    end
+  stock_before_max = stock[0..max_idx]
+  stock_in_between = stock[max_idx + 1...min_idx]
+  stock_after_min = stock[min_idx..-1]
+  
+  sections = [
+    stock_before_max,
+    stock_in_between,
+    stock_after_min
+  ]
+
+  profits = sections.map { |section| profit(section) }
+
+  return nil if profits.all? { |profit| profit == 0 }
+
+  most_profitable_section_idx = profits.index(profits.max)
+
+  most_profitable_pair = find_min_max_index(sections[most_profitable_section_idx])
+
+  case most_profitable_section_idx
+  when 0
+    most_profitable_pair
+  when 1
+    most_profitable_pair.map { |idx| idx + max_idx + 1 }
+  when 2
+    most_profitable_pair.map { |idx| idx + min_idx }
   end
+end
 
-  return nil if min_idx.nil?
+def find_min_max_index(arr)
+  [arr.index(arr.min), arr.index(arr.max)]
+end
 
-  part_prices = prices[min_idx + 1..-1]
+def profit(stock)
+  idx_pair = stock_picker(stock)
+  return 0 if idx_pair.nil?
 
-  max_idx = part_prices.index(part_prices.max) + min_idx + 1
-
-
-  [min_idx, max_idx]
+  min_idx, max_idx = idx_pair
+  stock[max_idx] - stock[min_idx]
 end
