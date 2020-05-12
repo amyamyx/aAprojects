@@ -62,8 +62,14 @@ describe "#my_transpose" do
 end
 
 describe "#stock_picker" do
-  prices = [20, 19, 18, 9, 10, 12, 17, 2]
+  good_stock = [20, 19, 18, 9, 10, 12, 17]
+  bad_stock = [20, 19, 18, 17, 16, 15, 14]
+
   it "should return the indices representing the most profitable days of buying and selling" do
-    expect(stock_picker(prices)).to eq([3, 6])
+    expect(stock_picker(good_stock)).to eq([3, 6])
+  end
+  
+  it "should return nil when there's no profitable buying points" do
+    expect(stock_picker(bad_stock)).to be(nil)
   end
 end
