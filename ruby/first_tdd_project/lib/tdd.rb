@@ -38,13 +38,25 @@ def my_transpose(arr)
 end
 
 def stock_picker(prices)
-  best_pair = [0, 1]
-  best_profit = profit(prices, best_pair)
+  min_idx = nil
 
-  
-end
+  fence = prices.length
 
-def profit(prices, pair)
-  buy, sell = pair
-  prices[sell] - prices[buy]
+  until min_idx || fence == 0
+    part_prices = prices[0...fence]
+    min_idx = part_prices.index(part_prices.min)
+    if min_idx == fence - 1
+      min_idx = nil
+      fence -= 1
+    end
+  end
+
+  return nil if min_idx.nil?
+
+  part_prices = prices[min_idx + 1..-1]
+
+  max_idx = part_prices.index(part_prices.max) + min_idx + 1
+
+
+  [min_idx, max_idx]
 end
