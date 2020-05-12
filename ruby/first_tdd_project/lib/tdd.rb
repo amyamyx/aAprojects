@@ -40,7 +40,9 @@ end
 def stock_picker(stock)
   min_idx, max_idx = find_min_max_index(stock)
   return nil if min_idx == max_idx || stock.empty?
+  return nil if stock.reverse == stock.sort
   return [min_idx, max_idx] if min_idx < max_idx
+  
 
   best_profit = 0
 
@@ -55,8 +57,6 @@ def stock_picker(stock)
   ]
 
   profits = sections.map { |section| profit(section) }
-
-  return nil if profits.all? { |profit| profit == 0 }
 
   most_profitable_section_idx = profits.index(profits.max)
 
