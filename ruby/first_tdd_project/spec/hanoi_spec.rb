@@ -35,12 +35,21 @@ describe "Hanoi" do
     end
   end
 
+  describe "#won?" do
+    it "should return whether or not all discs are sorted and located in the last pile" do
+      piles_3[2] = [1, 2, 3]
+      piles_3[0] = []
+      piles_4[1] = [1, 2, 3, 4]
+      piles_4[0] = []
+      
+      expect(three_disc_game.won?).to be(true)
+      expect(four_disc_game.won?).to be(false)
+    end
+  end
+
   # describe "#move" do
   #   it "pedning"
   # end
 
-  # describe "#won?" do
-  #   it "pending"
-  # end
 
 end

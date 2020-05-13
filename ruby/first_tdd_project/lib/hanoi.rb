@@ -11,6 +11,11 @@ class Hanoi
   end
 
   def place_discs
-    (1..@num_discs).each { |num| @piles[0].push(num) }
+    @piles[0] = (1..@num_discs).to_a
   end
+
+  def won?
+    @piles[2] == (1..@num_discs).to_a
+  end
+
 end
