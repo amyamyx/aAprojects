@@ -38,7 +38,7 @@ def my_transpose(arr)
 end
 
 def stock_picker(stock)
-  min_idx, max_idx = find_min_max_index(stock)
+  min_idx, max_idx = find_min_max_idx(stock)
   return nil if min_idx == max_idx || stock.empty?
   return nil if stock.reverse == stock.sort
   return [min_idx, max_idx] if min_idx < max_idx
@@ -51,21 +51,21 @@ def stock_picker(stock)
 
   profits = sections.map { |section| profit(section) }
 
-  most_profitable_section_idx = profits.index(profits.max)
-  most_profitable_section = sections[most_profitable_section_idx]
-  most_profitable_idx_pair = find_min_max_index(most_profitable_section)
+  best_section_idx = profits.index(profits.max)
+  best_section = sections[best_section_idx]
+  best_idx_pair = find_min_max_idx(best_section)
 
-  case most_profitable_section_idx
+  case best_section_idx
   when 0
-    most_profitable_idx_pair
+    best_idx_pair
   when 1
-    most_profitable_idx_pair.map { |idx| idx + max_idx + 1 }
+    best_idx_pair.map { |idx| idx + max_idx + 1 }
   when 2
-    most_profitable_idx_pair.map { |idx| idx + min_idx }
+    best_idx_pair.map { |idx| idx + min_idx }
   end
 end
 
-def find_min_max_index(arr)
+def find_min_max_idx(arr)
   [arr.index(arr.min), arr.index(arr.max)]
 end
 
