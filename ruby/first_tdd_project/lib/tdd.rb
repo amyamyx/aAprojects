@@ -43,12 +43,7 @@ def stock_picker(stock)
   return nil if stock.reverse == stock.sort
   return [min_idx, max_idx] if min_idx < max_idx
   
-  sections = [
-    stock[0..max_idx],
-    stock[max_idx + 1...min_idx],
-    stock[min_idx..-1]
-  ]
-
+  sections = partition_by_indices(stock, [max_idx, min_idx])
   profits = sections.map { |section| profit(section) }
 
   best_section_idx = profits.index(profits.max)
@@ -67,6 +62,11 @@ end
 
 def find_min_max_idx(arr)
   [arr.index(arr.min), arr.index(arr.max)]
+end
+
+def partition_by_indices(arr, indices)
+  idx_1, idx_2 = indices
+  [arr[0..idx_1], arr[idx_1 + 1...idx_2], arr[idx_2..-1]]
 end
 
 def profit(stock)
