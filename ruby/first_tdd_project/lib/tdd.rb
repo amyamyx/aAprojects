@@ -52,16 +52,16 @@ def stock_picker(stock)
   profits = sections.map { |section| profit(section) }
 
   most_profitable_section_idx = profits.index(profits.max)
-
-  most_profitable_pair = find_min_max_index(sections[most_profitable_section_idx])
+  most_profitable_section = sections[most_profitable_section_idx]
+  most_profitable_idx_pair = find_min_max_index(most_profitable_section)
 
   case most_profitable_section_idx
   when 0
-    most_profitable_pair
+    most_profitable_idx_pair
   when 1
-    most_profitable_pair.map { |idx| idx + max_idx + 1 }
+    most_profitable_idx_pair.map { |idx| idx + max_idx + 1 }
   when 2
-    most_profitable_pair.map { |idx| idx + min_idx }
+    most_profitable_idx_pair.map { |idx| idx + min_idx }
   end
 end
 
