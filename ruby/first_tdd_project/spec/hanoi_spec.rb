@@ -36,7 +36,7 @@ describe "Hanoi" do
   end
 
   describe "#won?" do
-    it "should return whether or not all discs are sorted and located in the last pile" do
+    it "should return whether or not all discs are in the last pile" do
       piles_3[2] = [1, 2, 3]
       piles_3[0] = []
       piles_4[1] = [1, 2, 3, 4]
@@ -47,9 +47,20 @@ describe "Hanoi" do
     end
   end
 
-  # describe "#move" do
-  #   it "pedning"
-  # end
+  describe "#move" do
+    before(:each) do
+      three_disc_game.piles[0] = [2, 3]
+      three_disc_game.piles[1] = [1]
+    end
 
+    it "should return false if no valid move is made" do
+      expect(three_disc_game.move(2, 1)).to be(false)
+      expect(three_disc_game.move(0, 1)).to be(false)
+    end
 
+    it "should move the top disc of the starting pile to the ending pile" do 
+      expect(three_disc_game.move(0, 2)).to be(true)
+      expect(three_disc_game.piles).to eq([[3], [1], [2]])
+    end
+  end
 end

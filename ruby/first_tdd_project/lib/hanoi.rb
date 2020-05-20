@@ -18,4 +18,11 @@ class Hanoi
     @piles[2] == (1..@num_discs).to_a
   end
 
+  def move(pos_1, pos_2)
+    return false if @piles[pos_1].empty?
+    return false if !@piles[pos_2].empty? && @piles[pos_1].first > @piles[pos_2].first
+    @piles[pos_2].unshift(@piles[pos_1].shift)
+    true
+  end
+
 end
