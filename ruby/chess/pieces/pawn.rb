@@ -1,57 +1,62 @@
 require_relative "piece"
 
+
 class Pawn < Piece
-  def initialize(color, board, pos)
-    super(color, board, pos)
+  def initialize(board, pos, color)
+    super(board, pos, color)
+    @og_pos = pos
   end
-
-  def symbol
-    "♙"
-  end
-
-  def move_dirs
-  end
-
-  def moves
-    side_attacks + forward_steps
-  end
-
-  private
   
-  def at_start_row?
-    @pos[0] == (color == :blue ? 6 : 1)
+  def symbol
+    @color == :red ? "♟" : "♙"
   end
-
-  def forward_dir
-    d_row = @color == :red ? 1 : -1
-    [d_row, 0]
-  end
-
-  def forward_steps
-    forward_pos = [move_(*forward_dir)]
-    forward_pos << move_(*forward_dir.map { |i| i * 2 }) if at_start_row?
-    forward_pos.select { |pos| @board[pos].empty? }
-  end
-
-  def move_(d_row, d_col)
-    row, col = @pos
-    [row + d_row, col + d_col]
-  end
-
-  def side_attacks
-    attack_pos = []
-    row, col = @pos
-    d_row = forward_dir[0]
-    
-    [1, -1].each do |d_col|
-      new_pos = move_(d_row, d_col)
-      next unless @board.valid_pos?(new_pos)
-      attack_piece = @board[new_pos]
-      if !attack_piece.empty? && attack_piece.color != @color
-        attack_pos << new_pos
+  
+  def moves
+    result = []
+    x, y = @pos
+    forward_steps.each do |step|
+      dx, dy = step
+      new_pos = [x + dx, y + dy]
+      if within_range?(new_pos) && !blocked?(new_pos)
+        result << new_pos
       end
     end
 
-    attack_pos
+    side_attacks.each do |step|
+      dx, dy = step
+      new_pos = [x + dx, y + dy]
+
+      next unless within_range?(new_pos)
+      result << new_pos if @board[new_pos].color == opposing_color
+    end
+
+    result
+  end
+
+
+  def dup(b)
+    Pawn.new(b, @pos, @color)
+  end
+
+  private
+
+  def at_start_pos?
+    @pos == @og_pos
+  end
+
+  def forward_dir
+    @color == :red ? 1 : -1
+  end
+
+  def forward_steps
+    if at_start_pos?
+      [[forward_dir, 0], [forward_dir * 2, 0]]
+    else
+      [[forward_dir, 0]]
+    end
+  end
+
+  def side_attacks
+    [[forward_dir, 1], [forward_dir, -1]]
   end
 end

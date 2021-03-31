@@ -1,22 +1,21 @@
 require_relative "piece"
-require "singleton"
+require "Singleton"
 
 class NullPiece < Piece
   include Singleton
-
-  attr_reader :symbol, :color
-
   def initialize
-  end
-  
-  def empty?
-    true
+    @color = nil
   end
 
-  def move
+  def moves
+  end
+
+  def dup(b)
+    self
   end
 
   def symbol
     " "
   end
+
 end

@@ -1,21 +1,24 @@
 require_relative "piece"
-require_relative "modules/slideable"
+require_relative "slidable"
 
 class Queen < Piece
+  include Slidable
 
-  include Slideable
-
-  def initialize(color, board, pos)
-    super(color, board, pos)
+  def initialize(board, pos, color)
+    super(board, pos, color)
   end
 
   def symbol
-    "♛"
+    @color == :red ? "♛" : "♕"
   end
 
-  protected
+  def dup(b)
+    Queen.new(b, @pos, @color)
+  end
+  
+  private
 
   def move_dirs
-    horizontal_dirs + diagonal_dirs
+     HORIZONTAL_DIRS + DIAGONAL_DIRS
   end
 end

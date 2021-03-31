@@ -1,22 +1,30 @@
 require_relative "piece"
-require_relative "modules/stepable"
+require_relative "stepable"
 
 class Knight < Piece
-
   include Stepable
 
-  def initialize(color, board, pos)
-    super(color, board, pos)
+  def initialize(board, pos, color)
+    super(board, pos, color)
   end
 
-  def symbol
-    "♞"
+  def symbol 
+    @color == :red ? "♞" : "♘"
+  end
+
+  def dup(b)
+    Knight.new(b, @pos, @color)
   end
 
   protected
 
-  def move_dirs
-    dirs = [[1, 2], [1, -2], [-1, 2], [-1, -2]]    
-    dirs + dirs.map(&:reverse)
+  def move_diffs
+    [
+      [2, 1], [1, 2], 
+      [1, -2],[-2, 1],
+      [-1, 2], [2, -1],
+      [-2, -1], [-1, -2]
+    ]
   end
+  
 end

@@ -32,11 +32,13 @@ MOVES = {
 
 class Cursor
 
-  attr_reader :cursor_pos, :board
+  attr_reader :cursor_pos, :board, :selected_pos, :selected
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
+    @selected_pos = nil
+    @selected = false
   end
 
   def get_input
@@ -44,32 +46,31 @@ class Cursor
     handle_key(key)
   end
 
+  def color
+    @selected ? :cyan : :yello
+  end
+
   private
 
   def read_char
+    STDIN.echo = false # stops the console from printing return values
 
-    # stops the console from printing return values
-    STDIN.echo = false 
+    STDIN.raw! # in raw mode data is given as is to the program--the system
+                 # doesn't preprocess special characters such as control-c
 
-    # in raw mode data is given as is to the program--the system
-    # doesn't preprocess special characters such as control-c
-    STDIN.raw! 
-
-    # STDIN.getc reads a one-character string as a
-    # numeric keycode. chr returns a string of the
-    # character represented by the keycode.
-    # (e.g. 65.chr => "A")
-    input = STDIN.getc.chr 
+    input = STDIN.getc.chr # STDIN.getc reads a one-character string as a
+                             # numeric keycode. chr returns a string of the
+                             # character represented by the keycode.
+                             # (e.g. 65.chr => "A")
 
     if input == "\e" then
-      # read_nonblock(maxlen) reads
-      # at most maxlen bytes from a
-      # data stream; it's nonblocking,
-      # meaning the method executes
-      # asynchronously; it raises an
-      # error if no data is available,
-      # hence the need for rescue
-      input << STDIN.read_nonblock(3) rescue nil 
+      input << STDIN.read_nonblock(3) rescue nil # read_nonblock(maxlen) reads
+                                                   # at most maxlen bytes from a
+                                                   # data stream; it's nonblocking,
+                                                   # meaning the method executes
+                                                   # asynchronously; it raises an
+                                                   # error if no data is available,
+                                                   # hence the need for rescue
 
       input << STDIN.read_nonblock(2) rescue nil
     end
@@ -83,29 +84,43 @@ class Cursor
   def handle_key(key)
     case key
     when :return
-      @cursor_pos
+      toggle_selected
+      return @cursor_pos
     when :space
-      @cursor_pos
+      toggle_selected
+      return @cursor_pos
     when :left
-      update_pos(MOVES[key])
+      update_pos(MOVES[:left])
+      nil
     when :right
-      update_pos(MOVES[key])
-    when :down
-      update_pos(MOVES[key])
+      update_pos(MOVES[:right])
+      nil
     when :up
-      update_pos(MOVES[key])
+      update_pos(MOVES[:up])
+      nil
+    when :down
+      update_pos(MOVES[:down])
+      nil
     when :ctrl_c
       Process.exit(0)
     end
   end
 
   def update_pos(diff)
-    row, col = @cursor_pos
-    d_row, d_col = diff
-    new_row = (row + d_row) % 8
-    new_col = (col + d_col) % 8
+    dx, dy = diff
+    x, y = @cursor_pos
 
-    @cursor_pos = [new_row, new_col]
-    nil
+    @cursor_pos = [(x + dx) % 8, (y + dy) % 8]
   end
+
+  def toggle_selected
+    if @selected
+      @selected_pos = nil
+      @selected = false
+    else
+      @selected_pos = @cursor_pos
+      @selected = true
+    end    
+  end
+  
 end

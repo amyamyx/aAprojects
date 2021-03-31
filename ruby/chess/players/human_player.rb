@@ -1,37 +1,33 @@
 require_relative "player"
 
+
 class HumanPlayer < Player
   def initialize(color, display)
     super(color, display)
-    @cursor = display.cursor
   end
+  
+  def make_move(board)
+    begin
+      pos_1, pos_2 = nil, nil
+      
+      loop do
+        pos_1 = @display.cursor.get_input
+        @display.render
+        break if !pos_1.nil?
+      end
 
-  def make_move(_board)
-    cursor = @display.cursor
+      loop do
+        pos_2 = @display.cursor.get_input
+        @display.render
+        break if !pos_2.nil?
+      end
 
-    start_pos = get_pos
-    selected_piece = _board[start_pos]
-    selected_piece.toggle_selected
-    end_pos = get_pos
-    
-    _board.move_piece!(start_pos, end_pos)
-    selected_piece.toggle_selected
-
-  end
-
-  def get_pos
-    display_board_and_message
-    pos = @cursor.get_input
-    while pos.nil?
-      display_board_and_message
-      pos = @cursor.get_input 
+      board.move_piece(pos_1, pos_2)
+    rescue => e
+      puts e.message
+      retry
     end
-    pos
-  end
 
-  def display_board_and_message
-    system("clear")
-    puts "#{@color}'s turn"
-    @display.render
+    true
   end
 end

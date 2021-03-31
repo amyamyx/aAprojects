@@ -5,43 +5,36 @@ require_relative "players/computer_player"
 
 class Game
   def initialize
-    @board = Board.new
+    @board = Board.setup
     @display = Display.new(@board)
-    @players = { 
-      blue: HumanPlayer.new(:blue, @display),
-      red: HumanPlayer.new(:red, @display)
-    }
-    @current_player = @players[:blue]
+    @player1 = HumanPlayer.new(:white, @display)
+    @player2 = HumanPlayer.new(:red, @display)
+    @current_player = @player1
   end
 
   def play
-    until over?
+    until [:white, :red].any? { |color| @board.checkmate?(color)}
+      @display.render
       notify_players
-      make_move
+      @current_player.make_move(@board)
       swap_turn!
     end
+    checkmate_message
   end
 
   private
 
   def notify_players
-    puts "#{@current_player.color.to_s}'s turn"
+    puts "It's #{@current_player.color}'s turn..."
+  end
+
+  def checkmate_message
+    puts "Checkmate! #{@current_player.color.capitalize} player lost."
   end
 
   def swap_turn!
-    @current_player = @current_player == @players[:blue] ? @players[:red] : @players[:blue]
+    @current_player = @current_player == @player1 ? @player2 : @player1
   end
-
-  def over?
-    # TODO: @board.tie? and @board.win?
-
-    # @board.tie? || @board.win?
-  end
-
-  def make_move
-    @current_player.make_move(@board)
-  end
-
 end
 
 if __FILE__ == $PROGRAM_NAME

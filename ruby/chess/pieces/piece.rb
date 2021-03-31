@@ -1,40 +1,46 @@
-require "colorize"
-
 class Piece
-  attr_reader :color, :selected
   attr_accessor :pos
-  def initialize(color, board, pos)
-    @color = color
+  attr_reader :color
+  def initialize(board, pos, color)
     @board = board
     @pos = pos
-    @selected = false
+    @color = color
   end
 
-  def empty?
-    false
-  end
-  
   def moves
   end
 
   def valid_moves
-    moves.select { |move| move_into_check?(move) }
+    moves.reject { |move| move_into_check?(move) }
   end
 
-  def move_into_check?(end_pos)
-    dup_board = @board.dup
-    dup_board.move_piece!(@pos, end_pos)
-    dup_board.in_check?(@color == :blue ? :red : :blue)
-  end
-  
   def symbol
   end
 
-  def toggle_selected
-    @selected = !@selected
+  def dup(b)
   end
 
-  def to_s
-    symbol.colorize(@color)
+  protected
+
+  def within_range?(position)
+    position.all? { |x| x.between?(0, 7) }
+  end
+
+  def blocked?(position)
+    @board[position].symbol != " "
+  end
+
+  def same_color?(position)
+    @board[position].color == @color
+  end
+  
+  def move_into_check?(end_pos)
+    board_dup = @board.dup
+    board_dup.move_piece!(@pos, end_pos)
+    board_dup.in_check?(@color)
+  end
+
+  def opposing_color
+    @color == :white ? :red : :white
   end
 end

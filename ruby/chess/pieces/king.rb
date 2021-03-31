@@ -1,22 +1,28 @@
 require_relative "piece"
-require_relative "modules/stepable"
+require_relative "stepable"
 
 class King < Piece
-
   include Stepable
-
-  def initialize(color, board, pos)
-    super(color, board, pos)
+  def initialize(board, pos, color)
+    super(board, pos, color)
   end
 
-  def symbol
-    "♚"
+  def symbol 
+    @color == :red ? "♚" : "♔"
+  end
+
+  def dup(b)
+    King.new(b, @pos, @color)
   end
 
   protected
 
-  def move_dirs
-    dirs = [[1, 0], [-1, 1], [-1, 0]]    
-    dirs + dirs.map(&:reverse) + [[1, 1], [-1, -1]]
+  def move_diffs
+    [
+      [1, 1], [1, 0], [1, -1],
+      [0, 1], [0, -1],
+      [-1, 1], [-1, 0], [-1, -1]
+    ]
   end
+  
 end
