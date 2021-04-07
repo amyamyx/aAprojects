@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
-gem "rspec"
-gem "guard"
-gem "guard-rspec", require: false
+
+group :development do
+  gem "rspec"
+  gem "guard"
+  gem "guard-rspec", require: false
+end
