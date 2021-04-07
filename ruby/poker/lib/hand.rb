@@ -95,11 +95,11 @@ class Hand
     when :high_card
       compare_hc(another_hand)
     when :full_house
-      compare_fh(another_hand)
+      compare_dominant_set(another_hand)
     when :four_of_a_kind
-      compare_foak(another_hand)
+      compare_dominant_set(another_hand)
     when :three_of_a_kind
-      compare_toak(another_hand)
+      compare_dominant_set(another_hand)
     when :flush
       compare_flushes(another_hand)
     when :pair
@@ -145,19 +145,21 @@ class Hand
   def compare_hc(hand)
   end
 
-  def compare_fh(hand)
+  def compare_dominant_set(hand)
+    return true if self.dominant_number == 1 
+    return false if hand.dominant_number == 1
+
+    dominant_number > hand.dominant_number
   end
 
-  def compare_foak(hand)
-  end
-
-  def compare_toak(hand)
+  def dominant_number
+    number_count.select { |k, v| v == 3 || v == 4 }.keys.first
   end
 
   def compare_flushes(hand)
   end
 
-  def compair_pairs(hand)
+  def compare_pairs(hand)
   end
 
   def compare_tp(hand)
