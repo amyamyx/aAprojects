@@ -110,32 +110,31 @@ class Hand
   end
 
   def compare_straights(another_hand)
-    my_largest_card = self.largest_card
-    other_largest_card = another_hand.largest_card
+    my_largest_card = self.largest_card_for_straight
+    other_largest_card = another_hand.largest_card_for_straight
 
     if my_largest_card.num == other_largest_card.num
-      return CARD_RANK[my_largest_card] > CARD_RANK[other_largest_card] 
+      return CARD_RANK[my_largest_card.type] > CARD_RANK[other_largest_card.type] 
     else
-      return true if my_largest_card.num == 1
-      return false if other_largest_card.num == 1
-      return my_largest_card.num > other_largest_card.num
+      compare_largest_card(other_largest_card)
     end
   end
 
-  def largest_card
+  def largest_card_for_straight
     sorted_cards = cards_sort_by_num
-    if sorted_cards.map(&:num) == [1, 10, 11, 12, 13]
-      return sorted_cards.first
-    else
+    if sorted_cards.map(&:num) == [13, 12, 11, 10, 1]
       return sorted_cards.last
+    else
+      return sorted_cards.first
     end
   end
 
   def cards_sort_by_num
-    @cards.sort { |card| card.num }.reverse
+    @cards.sort_by { |card| card.num }.reverse
   end
 
   def compare_sf(hand)
+
   end
 
   def compare_hc(hand)
@@ -155,17 +154,27 @@ class Hand
   def compare_flushes(hand)
     my_largest_card = largest_card
     other_largest_card = hand.largest_card
-
     case CARD_RANK[my_largest_card.type] <=> CARD_RANK[other_largest_card.type]
     when 1
       return true
     when -1
       return false
     when 0
-      return true if my_largest_card.num == 1
-      return false if other_largest_card.num == 1
-      my_largest_card.num > other_largest_card.num
+      compare_largest_card(other_largest_card)
     end
+  end
+  public
+
+  def compare_largest_card(other_largest_card)
+    my_largest_card = largest_card
+    return true if my_largest_card.num == 1
+    return false if other_largest_card.num == 1
+    my_largest_card.num > other_largest_card.num
+  end
+
+  def largest_card
+    sorted_cards = cards_sort_by_num
+    sorted_cards.last.num == 1 ? sorted_cards[-1] : sorted_cards[0]
   end
 
   def compare_pairs(hand)

@@ -212,7 +212,7 @@ describe Hand do
         end
         
         it "compares the largest card num if type is the same" do
-          expect(flush_hand.beat?(flush_hand3)).to be(true)
+          expect(flush_hand2.beat?(flush_hand3)).to be(true)
         end
       end
       
@@ -222,9 +222,10 @@ describe Hand do
         end
 
         it "compares the highest of the rest if pairs are the same" do
-          expect(pair_hand.beat?(pair_hand3).to be(false))
+          expect(pair_hand.beat?(pair_hand3)).to be(false)
         end
       end
     end
   end
+
 end
