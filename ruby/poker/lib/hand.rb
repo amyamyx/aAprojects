@@ -135,10 +135,6 @@ class Hand
     @cards.sort { |card| card.num }.reverse
   end
 
-  def compare_card_type(card1, card2)
-    CARD_RANK[card1.type] > CARD_RANK[card2.type] ? card1 : card2
-  end
-
   def compare_sf(hand)
   end
 
@@ -157,6 +153,23 @@ class Hand
   end
 
   def compare_flushes(hand)
+    my_largest_card = largest_card
+    other_largest_card = hand.largest_card
+
+    case CARD_RANK[my_largest_card.type] <=> CARD_RANK[other_largest_card.type]
+    when 1
+      return true
+    when -1
+      return false
+    when 0
+      return true if my_largest_card.num == 1
+      return false if other_largest_card.num == 1
+      my_largest_card.num > other_largest_card.num
+    end
+  end
+
+  def compare_types(hand)
+
   end
 
   def compare_pairs(hand)
