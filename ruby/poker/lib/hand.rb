@@ -168,10 +168,6 @@ class Hand
     end
   end
 
-  def compare_types(hand)
-
-  end
-
   def compare_pairs(hand)
   end
 
