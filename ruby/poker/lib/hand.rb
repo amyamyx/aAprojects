@@ -1,16 +1,42 @@
-require "byebug"
 class Hand
   attr_reader :cards, :hand_type
+
+  STRENGTH = {
+    straight_flush: 10, 
+    four_of_a_kind: 9,
+    full_house: 8,
+    flush: 7,
+    straight: 6,
+    three_of_a_kind: 5,
+    two_pairs: 4,
+    pair: 3,
+    high_card:2
+  }
   
   def initialize(cards)
     @cards = cards
     @hand_type = define_type
   end
 
+  def beat?(another_hand)
+    another_type = another_hand.hand_type
+    case STRENGTH[@hand_type] <=> STRENGTH[another_type]
+    when 1
+      return true
+    when -1
+      return false
+    else
+      return same_type_beat?(another_hand)
+    end
+  end
+
+  protected
+
   def define_type
     count_hash = number_count
     n_of_nums = count_hash.keys.count
     values = count_hash.values.sort
+    n_of_types = type_count.keys.count
 
     case n_of_nums
     when 4
@@ -19,20 +45,9 @@ class Hand
       return values == [1, 2, 2] ? :two_pairs : :three_of_a_kind
     when 2
       return values == [1, 4] ? :four_of_a_kind : :full_house
+    when 5
+      return define_type_of_5_nums(n_of_types)
     end
-
-    count_hash = type_count
-    n_of_types = count_hash.keys.count
-
-    if n_of_types == 1
-      return self.straight? ? :straight_flush : :flush
-    end
-    
-    return self.straight? ? :straight : :high_card
-  end
-
-  def beat?(another_hand)
-    
   end
 
   def number_count
@@ -52,6 +67,17 @@ class Hand
     return true if numbers == [1, 10, 11, 12, 13]
     n = numbers[0]
     numbers.map { |el| el - n } == (0..4).to_a
+  end
+
+  def define_type_of_5_nums(n_of_types)
+    if n_of_types == 1
+      return self.straight? ? :straight_flush : :flush
+    else
+      return self.straight? ? :straight : :high_card
+    end
+  end
+
+  def same_type_beat?(another_hand)
   end
 end
 
