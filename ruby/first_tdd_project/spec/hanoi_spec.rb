@@ -1,66 +1,78 @@
 require "hanoi"
 
-describe "Hanoi" do
-    subject(:three_disc_game) { Hanoi.new }
-    subject(:four_disc_game) { Hanoi.new(4) }
-    let(:piles_3) { three_disc_game.piles }
-    let(:piles_4) { four_disc_game.piles }
+describe Hanoi do 
+  subject(:hanoi_3) { Hanoi.new }
+  subject(:hanoi_4) { Hanoi.new(4) }
 
   describe "#initialize" do
-    it "initializes the game with the num_discs" do
-      expect(four_disc_game.num_discs).to be(4)
+    it "can take a number as an arugument and set it as a variable @num_disc" do 
+      expect { Hanoi.new(4) }.to_not raise_error
+      expect(hanoi_4.num_disc).to eq(4)
+      expect { Hanoi.new("yo") }.to raise_error(ArgumentError)
     end
 
-    it "should initialize the game with 3 discs if no argument is given" do
-      expect(three_disc_game.num_discs).to be(3)
+    it "if no argument is given, set it to 3 by default" do
+      expect { Hanoi.new }.to_not raise_error
+      expect(hanoi_3.num_disc).to eq(3)
     end
 
-    it "should set the @move_count to zero upon initialization" do
-      expect(three_disc_game.move_count).to be(0)
+    it "raises an error if the argument given is smaller than 3" do
+      expect { Hanoi.new(2) }.to raise_error("There has to be at least 3 discs")
     end
 
-    it "should have @piles that are an arry of 3 arrays" do
-      expect(piles_3.length).to eq(3)
-      expect(piles_3.all? { |el| el.is_a?(Array) }).to be(true)
+    it "sets up the @piles as an array of 3 arrays" do 
+      expect(hanoi_3.piles.length).to eq(3)
+      expect(hanoi_4.piles.length).to eq(3)
     end
 
-    it "all discs should be sorted and located in the first pile" do
-      expect(piles_3[0]).to eq([1, 2, 3])
-      expect(piles_4[0]).to eq([1, 2, 3, 4])
+    it "starts with all discs in the first pile" do
+      expect(hanoi_3.piles).to eq([[1, 2, 3], [], []])
+      expect(hanoi_4.piles).to eq([[1, 2, 3, 4], [], []])
+    end
+  end
+
+
+  describe "#move" do
+    it "takes in 2 numbers as arguments" do
+      expect { hanoi_3.move(0, 1) }.to_not raise_error
     end
 
-    it "2nd and 3rd piles should be emtpy" do 
-      expect(piles_3[1]).to eq([])
-      expect(piles_3[2]).to eq([])
+    it "raises an error if any of the indices is not between 0 and 2" do      
+      expect { hanoi_3.move(4, 0) }.to raise_error("Invalid index")
+      expect { hanoi_3.move(0, 7) }.to raise_error("Invalid index")
+    end
+
+    it "raises an error if there is no disc on the starting position" do
+      expect { hanoi_3.move(1, 2) }.to raise_error("There's no disc on pile 1")  
+    end
+
+    it "raises an error if the end pile has a smaller disc" do
+      hanoi_3.piles[1] = [1, 2]
+      hanoi_3.piles[0] = [3]
+      expect { hanoi_3.move(0, 1) }.to raise_error("You can't move there.")
+    end
+
+    it "moves the top disc from the start pile to the top of the end pile" do
+      hanoi_3.move(0, 1)
+      expect(hanoi_3.piles[0]).to eq([2, 3])
+      expect(hanoi_3.piles[1]).to eq([1])
     end
   end
 
   describe "#won?" do
-    it "should return whether or not all discs are in the last pile" do
-      piles_3[2] = [1, 2, 3]
-      piles_3[0] = []
-      piles_4[1] = [1, 2, 3, 4]
-      piles_4[0] = []
-      
-      expect(three_disc_game.won?).to be(true)
-      expect(four_disc_game.won?).to be(false)
-    end
-  end
-
-  describe "#move" do
-    before(:each) do
-      three_disc_game.piles[0] = [2, 3]
-      three_disc_game.piles[1] = [1]
+    it "returns true if all discs are in the last pile and sorted" do
+      hanoi_3.piles[-1] = [1, 2, 3]
+      hanoi_3.piles[0] = []
+      hanoi_4.piles[-1] = [1, 2, 3, 4]
+      hanoi_4.piles[0] = []
+      expect(hanoi_3.won?).to be(true)
+      expect(hanoi_4.won?).to be(true)
     end
 
-    it "should return false if no valid move is made" do
-      expect(three_disc_game.move(2, 1)).to be(false)
-      expect(three_disc_game.move(0, 1)).to be(false)
-    end
-
-    it "should move the top disc of the starting pile to the ending pile" do 
-      expect(three_disc_game.move(0, 2)).to be(true)
-      expect(three_disc_game.piles).to eq([[3], [1], [2]])
+    it "returns false if not all discs are the last pile" do
+      hanoi_3.piles[-1] = [1]
+      hanoi_3.piles[0] = [2, 3]
+      expect(hanoi_3.won?).to be(false)
     end
   end
 end
