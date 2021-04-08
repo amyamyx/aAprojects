@@ -1,3 +1,4 @@
+require "byebug"
 class Hand
   attr_reader :cards, :hand_type
 
@@ -116,7 +117,7 @@ class Hand
     if my_largest_card.num == other_largest_card.num
       return CARD_RANK[my_largest_card.type] > CARD_RANK[other_largest_card.type] 
     else
-      compare_largest_card(other_largest_card)
+      compare_largest_card(my_largest_card, other_largest_card)
     end
   end
 
@@ -139,7 +140,7 @@ class Hand
   def compare_hc(hand)
     my_largest_card = largest_card
     other_largest_card = hand.largest_card
-    compare_largest_card(other_largest_card)
+    compare_largest_card(my_largest_card, other_largest_card)
   end
 
   def compare_dominant_set(hand)
@@ -157,20 +158,17 @@ class Hand
     my_largest_card = largest_card
     other_largest_card = hand.largest_card
     case compare_card_rank(my_largest_card, other_largest_card)
-    # case CARD_RANK[my_largest_card.type] <=> CARD_RANK[other_largest_card.type]
     when 1
       return true
     when -1
       return false
     when 0
-      compare_largest_card(other_largest_card)
+      compare_largest_card(my_largest_card, other_largest_card)
     end
   end
   public
 
-  def compare_largest_card(other_largest_card)
-    my_largest_card = largest_card
-
+  def compare_largest_card(my_largest_card, other_largest_card)
     if my_largest_card.num == other_largest_card.num
       case compare_card_rank(my_largest_card, other_largest_card)
       when 1
@@ -216,18 +214,68 @@ class Hand
     my_rest_hand = Hand.new(cards_wo_pair)
     other_rest_hand = Hand.new(hand.cards_wo_pair)
 
-    my_rest_hand.compare_largest_card(other_rest_hand.largest_card)
+    compare_largest_card(my_rest_hand.largest_card, other_rest_hand.largest_card)
   end
 
   def cards_wo_pair
-    pair_num = find_pair_num
+    count_hash = number_count
     @cards.reject do |card|
-      card.num ==  pair_num
+      count_hash[card.num] == 2
     end
   end
 
   def compare_tp(hand)
-    
+    step1 = compare_first_largest_pair(hand)
+    return step1 if !step1.nil?
+    step2 = compare_second_pair(hand)
+    return step2 if !step2.nil?
+    return compare_largest_card(cards_wo_pair.first, hand.cards_wo_pair.first)
+  end
+
+  def tp_nums
+    keys = number_count.select { |k, v| v == 2 }.keys
+  end
+
+  def first_largest_pair_num
+    keys = number_count.select { |k, v| v == 2}.keys
+    return 1 if keys.include?(1)
+    return keys.max
+  end
+  
+  def second_pair_num
+    keys = number_count.select { |k, v| v == 2}.keys
+    return keys.reject { |key| key == 1 }.min
+  end
+
+  def compare_first_largest_pair(hand)
+    my_largest_pair_num = first_largest_pair_num
+    other_largest_pair_num = hand.first_largest_pair_num
+
+    case my_largest_pair_num <=> other_largest_pair_num
+    when 1
+      return false if other_largest_pair_num == 1
+      return true
+    when -1
+      return true if my_largest_pair_num == 1
+      return false
+    when 0
+      return nil
+    end
+  end
+
+
+  def compare_second_pair(hand)
+    my_second_pair_num = second_pair_num
+    other_second_pair_num = hand.second_pair_num
+
+    case my_second_pair_num <=> other_second_pair_num
+    when 1
+      return true
+    when -1
+      return false
+    when 0
+      return nil
+    end
   end
 end
 
