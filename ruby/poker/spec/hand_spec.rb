@@ -102,6 +102,7 @@ describe Hand do
   subject(:tp_hand) { Hand.new([c13, h13, c1, s1, c12]) }
   subject(:tp_hand2) { Hand.new([s13, d13, h1, d1, s12]) }
   subject(:tp_hand3) { Hand.new([s13, d13, c12, s12, c1] ) }
+  subject(:tp_hand4) { Hand.new([c13, h13, c3, s3, c10]) }
   subject(:toak_hand) { Hand.new([c13, h13, s13, c1, c12]) }
   subject(:toak_hand2) { Hand.new([c1, h1, s1, c5, c10]) }
   subject(:pair_hand) { Hand.new([c13, h13, c1, c12, c11]) }
@@ -219,13 +220,15 @@ describe Hand do
       context "pair/two pairs" do
         it "compares the largest pair" do
           expect(pair_hand.beat?(pair_hand2)).to be(true)
+          expect(tp_hand.beat?(tp_hand3)).to be(true)
         end
 
         it "compares the highest of the rest if pairs are the same" do
           expect(pair_hand.beat?(pair_hand3)).to be(false)
+          expect(tp_hand.beat?(tp_hand2)).to be(false)
+          expect(tp_hand3.beat?(tp_hand4)).to be(true)
         end
       end
     end
   end
-
 end

@@ -91,7 +91,7 @@ class Hand
     when :straight
       compare_straights(another_hand)
     when :straight_flush
-      compare_sf(another_hand)
+      compare_straights(another_hand)
     when :high_card
       compare_hc(another_hand)
     when :full_house
@@ -110,7 +110,7 @@ class Hand
   end
 
   def compare_straights(another_hand)
-    my_largest_card = self.largest_card_for_straight
+    my_largest_card = largest_card_for_straight
     other_largest_card = another_hand.largest_card_for_straight
 
     if my_largest_card.num == other_largest_card.num
@@ -134,10 +134,12 @@ class Hand
   end
 
   def compare_sf(hand)
-
   end
 
   def compare_hc(hand)
+    my_largest_card = largest_card
+    other_largest_card = hand.largest_card
+    compare_largest_card(other_largest_card)
   end
 
   def compare_dominant_set(hand)
@@ -154,7 +156,8 @@ class Hand
   def compare_flushes(hand)
     my_largest_card = largest_card
     other_largest_card = hand.largest_card
-    case CARD_RANK[my_largest_card.type] <=> CARD_RANK[other_largest_card.type]
+    case compare_card_rank(my_largest_card, other_largest_card)
+    # case CARD_RANK[my_largest_card.type] <=> CARD_RANK[other_largest_card.type]
     when 1
       return true
     when -1
@@ -167,6 +170,16 @@ class Hand
 
   def compare_largest_card(other_largest_card)
     my_largest_card = largest_card
+
+    if my_largest_card.num == other_largest_card.num
+      case compare_card_rank(my_largest_card, other_largest_card)
+      when 1
+        return true
+      when -1
+        return false
+      end
+    end
+
     return true if my_largest_card.num == 1
     return false if other_largest_card.num == 1
     my_largest_card.num > other_largest_card.num
@@ -177,10 +190,44 @@ class Hand
     sorted_cards.last.num == 1 ? sorted_cards[-1] : sorted_cards[0]
   end
 
+  def compare_card_rank(card1, card2)
+    CARD_RANK[card1.type] <=> CARD_RANK[card2.type]
+  end
+
   def compare_pairs(hand)
+    my_pair_num = find_pair_num
+    other_pair_num = hand.find_pair_num
+
+    case my_pair_num <=> other_pair_num
+    when 1
+      return true
+    when -1
+      return false
+    when 0
+      compare_rest(hand)
+    end
+  end
+
+  def find_pair_num
+    number_count.select { |k, v| v == 2 }.keys.first
+  end
+
+  def compare_rest(hand)
+    my_rest_hand = Hand.new(cards_wo_pair)
+    other_rest_hand = Hand.new(hand.cards_wo_pair)
+
+    my_rest_hand.compare_largest_card(other_rest_hand.largest_card)
+  end
+
+  def cards_wo_pair
+    pair_num = find_pair_num
+    @cards.reject do |card|
+      card.num ==  pair_num
+    end
   end
 
   def compare_tp(hand)
+    
   end
 end
 
