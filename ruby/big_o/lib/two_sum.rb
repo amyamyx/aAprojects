@@ -41,10 +41,28 @@ end
 
 def two_sum?(arr, target)
   hash = Hash.new
-  
+
   arr.each do |el|
     return true if hash[target - el] 
     hash[el] = true
+  end
+
+  false
+end
+
+def three_sum?(arr, target)
+  arr.each_with_index do |el, idx|
+    new_arr = arr.take(idx) + arr.drop(idx + 1)
+    return true if two_sum?(new_arr, target - el)
+  end
+
+  false
+end
+
+def four_sum?(arr, target)
+  arr.each_with_index do |el, idx|
+    new_arr = arr.take(idx) + arr.drop(idx + 1)
+    return true if three_sum?(new_arr, target - el)
   end
 
   false

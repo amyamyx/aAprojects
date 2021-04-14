@@ -17,3 +17,13 @@ describe "Two Sums" do
     expect(two_sum?(arr, 10)).to be(false)
   end
 end
+
+describe "Four Sum" do
+  let(:arr) { [-1, 2, 4, -5, 9, 12, 7, 2, 19, 23]}
+  it "#four_sum?" do
+    expect(four_sum?(arr, 0)).to be(true)
+    expect(four_sum?(arr, 28)).to be(true)
+    expect(four_sum?(arr, 35)).to be(true)
+    expect(four_sum?(arr, 9)).to be(false)
+  end
+end
