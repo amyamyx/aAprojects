@@ -195,7 +195,7 @@ end
 class MinMaxStackQueue
   def initialize
     @store1 = MinMaxStack.new
-    @store2 = MinMaxStack.new
+    @store2 = MyStack.new
   end
 
   def size
@@ -213,7 +213,7 @@ class MinMaxStackQueue
   def dequeue
     @store2.push(@store1.pop[:val]) until @store1.empty?
     @store2.pop
-    @store1.push(@store2.pop[:val]) until @store2.empty?
+    @store1.push(@store2.pop) until @store2.empty?
   end
 
   def range
