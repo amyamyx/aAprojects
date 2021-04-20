@@ -82,9 +82,10 @@ class LinkedList
     each do |node|
       if node.key == key
         node.remove
-        break
+        return true
       end
     end
+    false
   end
 
   def each
