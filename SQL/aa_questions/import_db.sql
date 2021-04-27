@@ -1,11 +1,10 @@
 PRAGMA foreign_keys = ON;
 
-DROP TABLE question_likes;
-DROP TABLE replies;
-DROP TABLE question_follows;
-DROP TABLE questions;
-DROP TABLE users;
-
+DROP TABLE IF EXISTS question_likes;
+DROP TABLE IF EXISTS replies;
+DROP TABLE IF EXISTS question_follows;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id INTEGER PRIMARY KEY,
@@ -36,7 +35,7 @@ CREATE TABLE replies (
   question_id INTEGER NOT NULL,
   parent_reply_id INTEGER,
   author_id INTEGER NOT NULL,
-  body TEXT NOT NULL
+  body TEXT NOT NULL,
 
   FOREIGN KEY (question_id) REFERENCES questions(id),
   FOREIGN KEY (parent_reply_id) REFERENCES replies(id),
@@ -61,32 +60,32 @@ VALUES
   ('Dave', 'Chappelle');
 
 INSERT INTO 
-  questions(title, body, author_id)
+  questions (title, body, author_id)
 VALUES
   ('Space X party?', 'I am having a party. RSVP to this thread.', 1),
   ('Like my new jokes?', 'What do y''all think about my new Netflix special?', 4);
 
 
 INSERT INTO
-  question_follows(follower_id, question_id)
+  question_follows (question_id, follower_id)
 VALUES 
   (1, 1),
   (1, 2),
   (2, 4);
 
 INSERT INTO
-  replies(question_id, author_id, body)
+  replies (question_id, author_id, body)
 VALUES
   (1, 2, 'I am down to earth'),
   (2, 3, 'Masterpiece, D!');
 
 INSERT INTO
-  replies(question_id, author_id, body, parent_reply_id)
+  replies (question_id, author_id, body, parent_reply_id)
 VALUES
   (1, 4, 'Word', 1);
 
 INSERT INTO
-  question_likes(question_id, liker_id)
+  question_likes (question_id, liker_id)
 VALUES 
   (1, 3), 
   (1, 2),
