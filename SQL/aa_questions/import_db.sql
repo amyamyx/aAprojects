@@ -63,7 +63,8 @@ INSERT INTO
   questions (title, body, author_id)
 VALUES
   ('Space X party?', 'I am having a party. RSVP to this thread.', 1),
-  ('Like my new jokes?', 'What do y''all think about my new Netflix special?', 4);
+  ('Like my new jokes?', 'What do y''all think about my new Netflix special?', 4),
+  ('Cyber Truck?', 'Tell me your opinions about cyber truck.', 1);
 
 
 INSERT INTO
@@ -89,4 +90,5 @@ INSERT INTO
 VALUES 
   (1, 3), 
   (1, 2),
+  (1, 4),
   (2, 1);
