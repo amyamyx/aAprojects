@@ -11,26 +11,103 @@ class QuestionsDatabase < SQLite3::Database
   end
 end
 
-class User
-  attr_accessor :fname, :lname
-
+class ModelBase
   def self.all
-    data = QuestionsDatabase.instance.execute("SELECT * FROM users")
-    data.map { |datum| User.new(datum) }
+    data = QuestionsDatabase.instance.execute("SELECT * FROM #{ self.tables[self] }")
+    data.map { |datum| self.new(datum) }
   end
 
   def self.find_by_id(id)
     data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT  
-        *
-      FROM  
-        users
-      WHERE
+      SELECT
+        * 
+      FROM 
+        #{ self.tables[self] }
+      WHERE 
         id = ?
     SQL
 
-    User.new(data.first)
+    self.new(data.first)
   end
+
+  def initialize(options)
+    @id = options['id']
+  end
+
+  def save
+    @id ? update : create
+  end
+
+  def id
+    @id
+  end
+
+  private
+
+  def self.tables
+    {
+      User => 'users',
+      Question => 'questions',
+      Reply => 'replies',
+      QuestionFollow => 'question_follows',
+      QuestionLike => 'question_likes'
+    }
+  end
+
+  def table
+    self.class.tables[self.class]
+  end
+
+  def create
+    raise "#{self} alreacy in database" if @id
+    values = var_values.values
+    query_str = "INSERT INTO #{ table } (#{columns}) VALUES (#{ marks(values.size) })"
+    QuestionsDatabase.instance.execute(query_str, *values)
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    values = var_values.values
+    query_str = "UPDATE #{ table } SET #{ set_str } WHERE id = ?"
+    QuestionsDatabase.instance.execute(query_str, *values, id)
+  end
+
+  def columns
+    instance_variables.reject { |sym| sym == :@id }.map do |var|
+      var.to_s[1..-1]
+    end.join(", ")
+  end
+
+  def var_values
+    value_hash = {}
+
+    instance_variables.each do |sym|
+      next if sym == :@id
+      value_hash[sym] = instance_variable_get(sym)
+    end
+
+    value_hash
+  end
+
+  def marks(n)
+    (["?"] * n).join(", ")
+  end
+  public
+
+  def set_str
+    result = ""
+
+    var_values.each do |sym, val|
+      result += "#{sym.to_s[1..-1]} = ?, "
+    end
+
+    result[0...-2]
+  end
+end
+
+class User < ModelBase
+  attr_accessor :fname, :lname
 
   def self.find_by_name(fname, lname)
     data = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
@@ -46,9 +123,9 @@ class User
   end
 
   def initialize(options)
-    @id = options['id']
     @fname = options['fname']
     @lname = options['lname']
+    @id = options['id']
   end
 
   def authored_questions
@@ -87,59 +164,10 @@ class User
 
     data.first['avg_karma']
   end
-
-  def save
-    @id ? update : create
-  end
-
-  private
-  
-  def create
-    raise "#{self} alreacy in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @fname, @lname)
-      INSERT INTO
-        users(fname, lname)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @fname, @lname, @id)
-      UPDATE
-        users
-      SET
-        fname = ?,
-        lname = ?
-      WHERE
-        id = ?
-    SQL
-  end
 end
 
-class Question
+class Question < ModelBase
   attr_accessor :body, :title, :author_id
-
-  def self.all
-    data = QuestionsDatabase.instance.execute('SELECT * FROM questions')
-    data.map { |datum| Question.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT  
-        *
-      FROM  
-        questions
-      WHERE
-        id = ?
-    SQL
-
-    Question.new(data.first)
-  end
 
   def self.find_by_author_id(author_id)
     data = QuestionsDatabase.instance.execute(<<-SQL, author_id)
@@ -188,59 +216,10 @@ class Question
   def num_likes
     QuestionLike.num_likes_for_question_id(@id)
   end
-
-  def save
-    @id ? update : create
-  end
-
-  private
-  
-  def create
-    raise "#{self} alreacy in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @title, @body, @author_id)
-      INSERT INTO
-        questions(title, body, author_id)
-      VALUES
-        (?, ?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @title, @body, @id)
-      UPDATE
-        questions
-      SET
-        title = ?,
-        body = ?,
-      WHERE
-        id = ?
-    SQL
-  end
 end
 
-class Reply
+class Reply < ModelBase
   attr_accessor :body, :question_id, :parent_reply_id, :author_id
-
-  def self.all
-    data = QuestionsDatabase.instance.execute('SELECT * FROM replies')
-    data.map { |datum| Reply.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT  
-        *
-      FROM  
-        replies
-      WHERE
-        id = ?
-    SQL
-
-    Reply.new(data.first)
-  end
 
   def self.find_by_user_id(user_id)
     data = QuestionsDatabase.instance.execute(<<-SQL, user_id)
@@ -300,58 +279,10 @@ class Reply
 
     data.map { |datum| Reply.new(datum) }
   end
-
-  def save
-    @id ? update : create
-  end
-
-  private
-  
-  def create
-    raise "#{self} alreacy in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @author_id, @question_id, @parent_reply_id, @body)
-      INSERT INTO
-        replies(author_id, question_id, parent_reply_id, body)
-      VALUES
-        (?, ?, ?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @body, @id)
-      UPDATE
-        replies
-      SET
-        body = ?
-      WHERE
-        id = ?
-    SQL
-  end
 end
 
-class QuestionFollow
+class QuestionFollow < ModelBase
   attr_accessor :follower_id, :question_id
-
-  def self.all
-    data = QuestionsDatabase.instance.execute('SELECT * FROM question_follows')
-    data.map { |datum| QuestionFollow.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT  
-        *
-      FROM  
-        question_follows
-      WHERE
-        id = ?
-    SQL
-
-    QuestionFollow.new(data.first)
-  end
 
   def self.followers_for_question_id(question_id)
     data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
@@ -403,59 +334,10 @@ class QuestionFollow
     @follower_id = options['follower_id']
     @question_id = options['question_id']
   end
-
-  def save
-    @id ? update : create
-  end
-
-  private
-  
-  def create
-    raise "#{self} already in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @follower_id)
-      INSERT INTO
-        question_follows(question_id, follower_id)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @follower_id, @id)
-      UPDATE
-        question_follows
-      SET
-        question_id = ?,
-        follower_id = ?
-      WHERE
-        id = ?
-    SQL
-  end
 end
 
-class QuestionLike
+class QuestionLike < ModelBase
   attr_accessor :question_id, :liker_id
-
-  def self.all
-    data = QuestionsDatabase.instance.execute('SELECT * FROM question_likes')
-    data.map { |datum| QuestionLike.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    data = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT  
-        *
-      FROM  
-        question_likes
-      WHERE
-        id = ?
-    SQL
-
-    QuestionLike.new(data.first)
-  end
 
   def self.likers_for_question_id(question_id)
     data = QuestionsDatabase.instance.execute(<<-SQL, question_id)
@@ -517,37 +399,6 @@ class QuestionLike
     @id = options['id']
     @question_id = options['question_id']
     @liker_id = options['liker_id']
-  end
-
-  def save
-    @id ? update : create
-  end
-
-  private
-  
-  def create
-    raise "#{self} already in database" if @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @liker_id)
-      INSERT INTO
-        question_likes(question_id, liker)
-      VALUES
-        (?, ?)
-    SQL
-
-    @id = QuestionsDatabase.instance.last_insert_row_id
-  end
-
-  def update
-    raise "#{self} not in database" unless @id
-    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @liker_id, @id)
-      UPDATE
-        question_likes
-      SET
-        question_id = ?,
-        liker_id = ?
-      WHERE
-        id = ?
-    SQL
   end
 end
 
