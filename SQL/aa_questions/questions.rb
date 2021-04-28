@@ -50,6 +50,14 @@ class User
     @fname = options['fname']
     @lname = options['lname']
   end
+
+  def authored_questions
+    Question.find_by_author_id(@id)
+  end
+
+  def authored_replies
+    Reply.find_by_user_id(@id)
+  end
 end
 
 class Question
@@ -91,6 +99,14 @@ class Question
     @title = options['title']
     @body = options['body']
     @author_id = options['author_id']
+  end
+
+  def author
+    User.find_by_id(@author_id)
+  end
+
+  def replies
+    Reply.find_by_question_id(@id)
   end
 end
 
@@ -147,6 +163,31 @@ class Reply
     @parent_reply_id = options['parent_reply_id']
     @author_id = options['author_id']
     @body = options['body']
+  end
+
+  def author
+    User.find_by_id(@author_id)
+  end
+
+  def question
+    Question.find_by_id(@question_id)
+  end
+
+  def parent_reply
+    Reply.find_by_id(@parent_reply_id)
+  end
+
+  def child_replies
+    data = QuestionsDatabase.instance.execute(<<-SQL, @id)
+      SELECT
+        *
+      FROM
+        replies
+      WHERE
+        parent_reply_id = ?
+    SQL
+
+    data.map { |datum| Reply.new(datum) }
   end
 end
 
