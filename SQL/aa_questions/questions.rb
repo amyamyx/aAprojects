@@ -87,6 +87,37 @@ class User
 
     data.first['avg_karma']
   end
+
+  def save
+    @id ? update : create
+  end
+
+  private
+  
+  def create
+    raise "#{self} alreacy in database" if @id
+    QuestionsDatabase.instance.execute(<<-SQL, @fname, @lname)
+      INSERT INTO
+        users(fname, lname)
+      VALUES
+        (?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    QuestionsDatabase.instance.execute(<<-SQL, @fname, @lname, @id)
+      UPDATE
+        users
+      SET
+        fname = ?,
+        lname = ?
+      WHERE
+        id = ?
+    SQL
+  end
 end
 
 class Question
@@ -156,6 +187,37 @@ class Question
 
   def num_likes
     QuestionLike.num_likes_for_question_id(@id)
+  end
+
+  def save
+    @id ? update : create
+  end
+
+  private
+  
+  def create
+    raise "#{self} alreacy in database" if @id
+    QuestionsDatabase.instance.execute(<<-SQL, @title, @body, @author_id)
+      INSERT INTO
+        questions(title, body, author_id)
+      VALUES
+        (?, ?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    QuestionsDatabase.instance.execute(<<-SQL, @title, @body, @id)
+      UPDATE
+        questions
+      SET
+        title = ?,
+        body = ?,
+      WHERE
+        id = ?
+    SQL
   end
 end
 
@@ -238,6 +300,36 @@ class Reply
 
     data.map { |datum| Reply.new(datum) }
   end
+
+  def save
+    @id ? update : create
+  end
+
+  private
+  
+  def create
+    raise "#{self} alreacy in database" if @id
+    QuestionsDatabase.instance.execute(<<-SQL, @author_id, @question_id, @parent_reply_id, @body)
+      INSERT INTO
+        replies(author_id, question_id, parent_reply_id, body)
+      VALUES
+        (?, ?, ?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    QuestionsDatabase.instance.execute(<<-SQL, @body, @id)
+      UPDATE
+        replies
+      SET
+        body = ?
+      WHERE
+        id = ?
+    SQL
+  end
 end
 
 class QuestionFollow
@@ -310,6 +402,37 @@ class QuestionFollow
     @id = options['id']
     @follower_id = options['follower_id']
     @question_id = options['question_id']
+  end
+
+  def save
+    @id ? update : create
+  end
+
+  private
+  
+  def create
+    raise "#{self} already in database" if @id
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @follower_id)
+      INSERT INTO
+        question_follows(question_id, follower_id)
+      VALUES
+        (?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @follower_id, @id)
+      UPDATE
+        question_follows
+      SET
+        question_id = ?,
+        follower_id = ?
+      WHERE
+        id = ?
+    SQL
   end
 end
 
@@ -394,6 +517,37 @@ class QuestionLike
     @id = options['id']
     @question_id = options['question_id']
     @liker_id = options['liker_id']
+  end
+
+  def save
+    @id ? update : create
+  end
+
+  private
+  
+  def create
+    raise "#{self} already in database" if @id
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @liker_id)
+      INSERT INTO
+        question_likes(question_id, liker)
+      VALUES
+        (?, ?)
+    SQL
+
+    @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    raise "#{self} not in database" unless @id
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @liker_id, @id)
+      UPDATE
+        question_likes
+      SET
+        question_id = ?,
+        liker_id = ?
+      WHERE
+        id = ?
+    SQL
   end
 end
 
