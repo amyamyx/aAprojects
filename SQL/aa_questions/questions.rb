@@ -1,5 +1,6 @@
 require 'singleton'
 require 'sqlite3'
+require 'active_support/inflector'
 
 class QuestionsDatabase < SQLite3::Database
   include Singleton
@@ -13,7 +14,7 @@ end
 
 class ModelBase
   def self.all
-    data = QuestionsDatabase.instance.execute("SELECT * FROM #{ self.tables[self] }")
+    data = QuestionsDatabase.instance.execute("SELECT * FROM #{ self.table }")
     data.map { |datum| self.new(datum) }
   end
 
@@ -22,7 +23,7 @@ class ModelBase
       SELECT
         * 
       FROM 
-        #{ self.tables[self] }
+        #{ self.table }
       WHERE 
         id = ?
     SQL
@@ -42,20 +43,43 @@ class ModelBase
     @id
   end
 
+  def self.where(filter)
+    if filter.is_a? String
+      where_line = filter
+      vals = []
+    else
+      where_line = self.where_clause(filter)
+      vals = filter.values
+    end
+
+    query = "SELECT * FROM #{ self.table } WHERE #{ where_line } "
+    data = QuestionsDatabase.instance.execute(query, *vals)
+    data.map { |datum| self.new(datum) }
+  end
+
+  def self.find_by(filter)
+    self.where(filter)
+  end
+  
+
   private
 
-  def self.tables
-    {
-      User => 'users',
-      Question => 'questions',
-      Reply => 'replies',
-      QuestionFollow => 'question_follows',
-      QuestionLike => 'question_likes'
-    }
+  def self.table
+    self.to_s.tableize
+  end
+
+  def self.where_clause(filter)
+    clause = ""
+    
+    filter.each do |sym, val|
+      clause += "#{sym} = ? AND "
+    end
+
+    clause[0...-4]
   end
 
   def table
-    self.class.tables[self.class]
+    self.class.table
   end
 
   def create
