@@ -2,9 +2,9 @@ require 'singleton'
 require 'sqlite3'
 
 class QuestionsDatabase < SQLite3::Database
-  include singleton
+  include Singleton
 
-  def initialilze
+  def initialize
     super('questions.db')
     self.type_translation = true
     self.results_as_hash = true
@@ -15,12 +15,12 @@ class User
   attr_accessor :fname, :lname
 
   def self.all
-    data = QuestionsDatabase.instance('SELECT * FROM users')
+    data = QuestionsDatabase.instance.execute("SELECT * FROM users")
     data.map { |datum| User.new(datum) }
   end
 
   def self.find_by_id(id)
-    data = QuestionsDatabase.instance(<<-SQL, id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT  
         *
       FROM  
@@ -29,20 +29,20 @@ class User
         id = ?
     SQL
 
-    User.new(data)
+    User.new(data.first)
   end
 
   def self.find_by_name(fname, lname)
-    data = QuestionsDatabase.instance(<<-SQL, fname, lname)
+    data = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
       SELECT
         *
       FROM
         users
       WHERE
-        fname = ?, lname = ?
+        fname = ? AND lname = ?
     SQL
     
-    User.new(data)
+    User.new(data.first)
   end
 
   def initialize(options)
@@ -56,12 +56,12 @@ class Question
   attr_accessor :body, :title, :author_id
 
   def self.all
-    data = QuestionsDatabase.instance('SELECT * FROM questions')
+    data = QuestionsDatabase.instance.execute('SELECT * FROM questions')
     data.map { |datum| Question.new(datum) }
   end
 
   def self.find_by_id(id)
-    data = QuestionsDatabase.instance(<<-SQL, id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT  
         *
       FROM  
@@ -70,7 +70,7 @@ class Question
         id = ?
     SQL
 
-    Question.new(data)
+    Question.new(data.first)
   end
 
   def initialize(options)
@@ -85,12 +85,12 @@ class Reply
   attr_accessor :body, :question_id, :parent_reply_id, :author_id
 
   def self.all
-    data = QuestionsDatabase.instance('SELECT * FROM replies')
+    data = QuestionsDatabase.instance.execute('SELECT * FROM replies')
     data.map { |datum| Reply.new(datum) }
   end
 
   def self.find_by_id(id)
-    data = QuestionsDatabase.instance(<<-SQL, id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT  
         *
       FROM  
@@ -99,7 +99,7 @@ class Reply
         id = ?
     SQL
 
-    Reply.new(data)
+    Reply.new(data.first)
   end
 
   def initialize(options)
@@ -115,12 +115,12 @@ class Follow
   attr_accessor :follower_id, :question_id
 
   def self.all
-    data = QuestionsDatabase.instance('SELECT * FROM question_follows')
-    data.map { |datum| FOllow.new(datum) }
+    data = QuestionsDatabase.instance.execute('SELECT * FROM question_follows')
+    data.map { |datum| Follow.new(datum) }
   end
 
   def self.find_by_id(id)
-    data = QuestionsDatabase.instance(<<-SQL, id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT  
         *
       FROM  
@@ -129,7 +129,7 @@ class Follow
         id = ?
     SQL
 
-    Follow.new(data)
+    Follow.new(data.first)
   end
 
   def initialize(options)
@@ -143,12 +143,12 @@ class Like
   attr_accessor :question_id, :liker_id
 
   def self.all
-    data = QuestionsDatabase.instance('SELECT * FROM question_likes')
+    data = QuestionsDatabase.instance.execute('SELECT * FROM question_likes')
     data.map { |datum| Like.new(datum) }
   end
 
   def self.find_by_id(id)
-    data = QuestionsDatabase.instance(<<-SQL, id)
+    data = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT  
         *
       FROM  
@@ -157,7 +157,7 @@ class Like
         id = ?
     SQL
 
-    Like.new(data)
+    Like.new(data.first)
   end
 
   def initialize(options)
