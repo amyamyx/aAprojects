@@ -43,7 +43,7 @@ class CLI
   
   def process_option(option)
     if option == 0
-      obj = ShortenedUrl.generate_short_url(@user, get_long_url)
+      obj = ShortenedUrl.generate_short_url!(@user, get_long_url)
       puts
       puts "Short url is: #{obj.short_url}"
     else
