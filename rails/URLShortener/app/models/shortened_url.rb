@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: shortened_urls
+#
+#  id         :bigint           not null, primary key
+#  short_url  :string           not null
+#  long_url   :string           not null
+#  user_id    :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class ShortenedUrl < ApplicationRecord
   validates :short_url, :long_url, presence: true, uniqueness: true
   
@@ -16,6 +27,15 @@ class ShortenedUrl < ApplicationRecord
     through: :visits,
     source: :visitor
 
+  has_many :taggings,
+    primary_key: :id,
+    foreign_key: :shortened_url_id,
+    class_name: "Tagging"
+
+  has_many :tag_topics,
+    through: :taggings,
+    source: :tag_topic_id
+
   def self.random_code
     loop do
       url = SecureRandom.urlsafe_base64(16)
@@ -23,7 +43,7 @@ class ShortenedUrl < ApplicationRecord
     end
   end
 
-  def self.generate_short_url(user, long_url)
+  def self.generate_short_url!(user, long_url)
     ShortenedUrl.create!({
       user_id: user.id, 
       long_url: long_url,
