@@ -1,3 +1,4 @@
 Gemfile.lock
 tmp/
 ../solution/
+config/webpack/master.key
