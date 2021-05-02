@@ -1,5 +1,4 @@
 Gemfile.lock
-/../solution/*
 /config/master.key
 
 /.bundle
