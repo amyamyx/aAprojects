@@ -24,5 +24,16 @@ class Question < ApplicationRecord
 
   has_many :responses,
     through: :answer_choices,
-    source: :responses    
+    source: :responses
+
+  def results
+    result = Hash.new(0)
+
+    answer_choices.includes(:responses).each do |choice|
+      num = choice.responses.count
+      result[choice.text] = num if num > 0 
+    end
+
+    result
+  end
 end
