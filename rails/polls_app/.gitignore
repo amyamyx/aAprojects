@@ -6,6 +6,7 @@ Gemfile.lock
 /log/*
 !/log/.keep
 !/tmp/.keep
+/test/
 
 /.bundle
 /yarn-error.log
