@@ -27,12 +27,13 @@ class Question < ApplicationRecord
     source: :responses
 
   def results
-    result = Hash.new(0)
+    result = {}
 
     answer_choices
       .joins(:responses)
       .select('answer_choices.text, COUNT(responses.id) AS response_num')
       .group('answer_choices.id')
+      .having('COUNT(responses.id) > 0')
       .each {|choice| result[choice.text] = choice.response_num }
 
     result
