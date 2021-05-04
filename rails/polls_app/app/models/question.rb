@@ -29,10 +29,11 @@ class Question < ApplicationRecord
   def results
     result = Hash.new(0)
 
-    answer_choices.includes(:responses).each do |choice|
-      num = choice.responses.count
-      result[choice.text] = num if num > 0 
-    end
+    answer_choices
+      .joins(:responses)
+      .select('answer_choices.text, COUNT(responses.id) AS response_num')
+      .group('answer_choices.id')
+      .each {|choice| result[choice.text] = choice.response_num }
 
     result
   end
