@@ -48,7 +48,7 @@ ac21 = AnswerChoice.create!({ question_id: q5.id, text:'3' })
 ac22 = AnswerChoice.create!({ question_id: q5.id, text:'4' })
 ac23 = AnswerChoice.create!({ question_id: q5.id, text:'5 Extremely satisfied' })
 
-r1 = Response.create!({ user_id: u3.id, question_id: q1.id, answer_choice_id: ac3.id })
-r2 = Response.create!({ user_id: u3.id, question_id: q2.id, answer_choice_id: ac10.id})
+r1 = Response.create!({ user_id: u3.id, answer_choice_id: ac3.id })
+r2 = Response.create!({ user_id: u3.id, answer_choice_id: ac10.id})
 
-r3 = Response.create!({ user_id: u2.id, question_id: q3.id, answer_choice_id: ac13.id})
+r3 = Response.create!({ user_id: u2.id, answer_choice_id: ac13.id})

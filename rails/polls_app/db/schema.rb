@@ -41,11 +41,9 @@ ActiveRecord::Schema.define(version: 20210504071202) do
 
   create_table "responses", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "question_id", null: false
     t.integer "answer_choice_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "question_id"], name: "index_responses_on_user_id_and_question_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
