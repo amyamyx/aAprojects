@@ -13,7 +13,8 @@ class Artwork < ApplicationRecord
   validates :title, :img_url, presence: true
   validates :title, uniqueness: { scope: :artist_id,
     message: "should not have duplicate title for the same artist" }
-
+  validates :favorite, inclusion: { in: [true, false] }
+  
   belongs_to :artist,
     primary_key: :id,
     foreign_key: :artist_id,

@@ -13,6 +13,7 @@ class ArtworkShare < ApplicationRecord
     scope: :viewer_id,
     messgae: "Can't be shared again to the same viewer."
   }
+  validates :favorite, inclusion: { in: [true, false] }
 
   belongs_to :viewer,
     primary_key: :id,
