@@ -36,6 +36,8 @@ Rails.application.routes.draw do
     member do
       post :favorite, to: "artworks#favorite", as: :favorite
       post :unfavorite, to: "artworks#unfavorite", as: :unfavorite
+      post :like, to: "artworks#like", as: :like
+      post :unlike, to: "artworks#unlike", as: :unlike
     end
   end
 

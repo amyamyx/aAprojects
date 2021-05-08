@@ -52,6 +52,33 @@ class ArtworksController < ApplicationController
     end
   end
 
+  def like
+    artwork = Artwork.find(params[:id])
+    like = Like.new({ 
+      likable_id: artwork.id,
+      likable_type: "Artwork",
+      liker_id: params[:liker_id]
+    })
+    
+    if like.save
+      render json: artwork
+    else
+      render json: like.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
+  def unlike
+    artwork = Artwork.find(params[:id])
+    like = Like.find_by({
+      likable_id: artwork.id,
+      likable_type: "Artwork",
+      liker_id: params[:liker_id]
+    })
+
+    like.destroy if like
+    render json: artwork
+  end
+
   private
 
   def artwork_params
