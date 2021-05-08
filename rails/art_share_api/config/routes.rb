@@ -32,6 +32,11 @@ Rails.application.routes.draw do
 
   resources :artworks, only: [:show, :create, :update, :destroy] do
     resources :comments, only: [:index]
+
+    member do
+      post :favorite, to: "artworks#favorite", as: :favorite
+      post :unfavorite, to: "artworks#unfavorite", as: :unfavorite
+    end
   end
 
   resources :artwork_shares, only: [:create, :destroy]

@@ -32,6 +32,26 @@ class ArtworksController < ApplicationController
     render json: artwork
   end
 
+  def favorite
+    artwork = Artwork.find(params[:id])
+    artwork.favorite = true
+    if artwork.save
+      render json: artwork
+    else
+      render json: artwork.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
+  def unfavorite
+    artwork = Artwork.find(params[:id])
+    artwork.favorite = false
+    if artwork.save
+      render json: artwork
+    else
+      render json: artwork.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def artwork_params
