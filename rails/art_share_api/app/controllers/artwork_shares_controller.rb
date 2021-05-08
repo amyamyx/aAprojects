@@ -15,6 +15,28 @@ class ArtworkSharesController < ApplicationController
     render json: artwork_share
   end
 
+  def favorite
+    artwork_share = ArtworkShare.find(params[:id])
+    artwork_share.favorite = true
+
+    if artwork_share.save
+      render json: artwork_share
+    else
+      render json: artwork_share.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+  
+  def unfavorite
+    artwork_share = ArtworkShare.find(params[:id])
+    artwork_share.favorite = false
+
+    if artwork_share.save
+      render json: artwork_share
+    else
+      render json: artwork_share.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
   private
   
   def share_params
