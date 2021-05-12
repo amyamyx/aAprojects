@@ -45,4 +45,15 @@ class Artwork < ApplicationRecord
   has_many :likers,
     through: :likes,
     source: :liker
+
+  
+  has_many :collections,
+    primary_key: :id,
+    foreign_key: :artwork_id,
+    class_name: "Collection",
+    dependent: :destroy
+
+  has_many :collectors,
+    through: :collections,
+    source: :user
 end

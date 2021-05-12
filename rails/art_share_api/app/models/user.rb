@@ -47,4 +47,14 @@ class User < ApplicationRecord
     through: :likables,
     source: :likable,
     source_type: "Artwork"  
+
+  has_many :collections,
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: "Collection",
+    dependent: :destroy
+
+  has_many :collected_artworks,
+    through: :collections,
+    source: :artwork
 end
