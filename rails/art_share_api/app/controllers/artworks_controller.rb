@@ -1,6 +1,10 @@
 class ArtworksController < ApplicationController
   def index
-    render json: User.find(params[:user_id]).artworks + User.find(params[:user_id]).shared_artworks
+    if params[:user_id]
+      render json: User.find(params[:user_id]).artworks + User.find(params[:user_id]).shared_artworks
+    elsif params[:collection_id]
+      render json: Collection.find(params[:collection_id]).collected_artworks
+    end
   end
 
   def show
