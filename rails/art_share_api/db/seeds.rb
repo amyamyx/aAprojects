@@ -37,3 +37,20 @@ s12 = ArtworkShare.create!({ artwork_id: a7.id, viewer_id: u4.id })
 s13 = ArtworkShare.create!({ artwork_id: a7.id, viewer_id: u5.id })
 s14 = ArtworkShare.create!({ artwork_id: a9.id, viewer_id: u1.id })
 s15 = ArtworkShare.create!({ artwork_id: a9.id, viewer_id: u2.id })
+
+c1 = Comment.create!({ artwork_id: a4.id, user_id: u1.id, body: "Cool!"})
+c2 = Comment.create!({ artwork_id: a4.id, user_id: u3.id, body: "True Masterpiece!"})
+c3 = Comment.create!({ artwork_id: a6.id, user_id: u2.id, body: "Nice User3!"})
+c4 = Comment.create!({ artwork_id: a9.id, user_id: u2.id, body: "Amazing!"})
+
+co1 = Collection.create!({ user_id: u5.id, name: "user3 arts" })
+co2 = Collection.create!({ user_id: u2.id, name: "bedroom deco options" })
+
+ac1 = ArtworkCollection.create!({ collection_id: co1.id, artwork_id: a5.id })
+ac2 = ArtworkCollection.create!({ collection_id: co1.id, artwork_id: a6.id })
+ac3 = ArtworkCollection.create!({ collection_id: co1.id, artwork_id: a7.id })
+ac4 = ArtworkCollection.create!({ collection_id: co1.id, artwork_id: a8.id })
+
+ac5 = ArtworkCollection.create!({ collection_id: co2.id, artwork_id: a3.id })
+ac6 = ArtworkCollection.create!({ collection_id: co2.id, artwork_id: a5.id })
+ac7 = ArtworkCollection.create!({ collection_id: co2.id, artwork_id: a9.id })
