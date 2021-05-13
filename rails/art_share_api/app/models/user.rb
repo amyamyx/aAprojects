@@ -54,7 +54,4 @@ class User < ApplicationRecord
     class_name: "Collection",
     dependent: :destroy
 
-  has_many :collected_artworks,
-    through: :collections,
-    source: :artwork
 end

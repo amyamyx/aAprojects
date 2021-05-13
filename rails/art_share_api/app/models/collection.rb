@@ -1,14 +1,19 @@
 class Collection < ApplicationRecord
-  validates :user_id, uniqueness: { scope: :artwork_id,
-  message: "can only collect the same artwork once" }
+  validates :name, presence: true, uniqueness: { scope: :user_id,
+    message: "should only appear once per user"}
 
   belongs_to :user,
     primary_key: :id,
     foreign_key: :user_id,
     class_name: "User"
 
-  belongs_to :artwork,
+  has_many :artwork_collections,
     primary_key: :id,
-    foreign_key: :artwork_id,
-    class_name: "Artwork"
+    foreign_key: :collection_id,
+    class_name: "ArtworkCollection",
+    dependent: :destroy
+  
+  has_many :collected_artworks,
+    through: :artwork_collections,
+    source: :artwork
 end
