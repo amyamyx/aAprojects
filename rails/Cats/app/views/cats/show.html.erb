@@ -1,6 +1,32 @@
 <h1><%= @cat.name %></h1>
+<table>
+  <thead>
+    <tr>
+      <th><%= @cat.name %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Sex</strong></td>
+      <td><%= @cat.sex %></td>
+    </tr>
 
-<h3>Sex: <%= @cat.sex %></h3>
-<h3>Color: <%= @cat.color %></h3>
-<h3>Age: <%= @cat.age %></h3>
-<p>Description: <%= @cat.description %></p>
+    <tr>
+      <td><strong>Color</strong></td>
+      <td><%= @cat.color %></td>
+    </tr>
+    
+    <tr>
+      <td><strong>Age</strong></td>
+      <td><%= @cat.age %></td>
+    </tr>
+
+    <tr>
+      <td><strong>Description</strong></td>
+      <td><%= @cat.description %></td>
+    </tr>
+  </tbody>
+
+
+</table>
+
