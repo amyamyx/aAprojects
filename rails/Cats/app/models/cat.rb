@@ -22,6 +22,12 @@ class Cat < ApplicationRecord
   validates :sex, inclusion: { in: [ "M", "F"], 
     messeage: "can only be M or F" }
 
+  has_many :cat_rental_requests,
+    primary_key: :id,
+    foreign_key: :cat_id,
+    class_name: "CatRentalRequest",
+    dependent: :destroy
+
   def age
     distance_of_time_in_words_to_now(self.birth_date) + " old"
   end
