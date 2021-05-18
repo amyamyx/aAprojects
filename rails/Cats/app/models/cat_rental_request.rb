@@ -20,5 +20,18 @@ class CatRentalRequest < ApplicationRecord
     foreign_key: :cat_id, 
     class_name: "Cat"
 
-  
+  def overlapping_requests
+    query_str = '(start_date > ? AND start_date <= ?) OR (end_date >= ? AND end_date <= ?)'
+
+    CatRentalRequest
+      .where(cat_id: self.cat_id)
+      .where(status: 'APPROVED')
+      .where(
+        query_str, 
+        self.start_date, 
+        self.end_date, 
+        self.start_date, 
+        self.end_date
+      )
+  end
 end
