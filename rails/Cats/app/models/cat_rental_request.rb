@@ -14,6 +14,7 @@ class CatRentalRequest < ApplicationRecord
   validates :start_date, :end_date, :status, presence: true
   validates :status, inclusion: { in: %w(PENDING APPROVED DENIED),
     message: "should only be 'PENDING', 'APPROVED' or 'DENIED'" }
+  validate :does_not_start_after_end_date
   validate :does_not_overlap_approved_request
 
   belongs_to :cat,
@@ -43,6 +44,12 @@ class CatRentalRequest < ApplicationRecord
   def does_not_overlap_approved_request
     if overlapping_approved_requests.exists?
       errors[:overlapping] << "with other approved requests" 
+    end
+  end
+
+  def does_not_start_after_end_date
+    if self.start_date > self.end_date
+      errors[:base] << "Can't start after the end date"
     end
   end
 end
