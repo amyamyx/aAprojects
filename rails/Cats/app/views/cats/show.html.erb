@@ -26,7 +26,16 @@
       <td><%= @cat.description %></td>
     </tr>
   </tbody>
-
-
 </table>
+
+<br>
+<br>
+<br>
+
+<label for="request_list">Existing Requests</label>
+<ul id="request_list">
+  <% @requests.each do |request| %>
+    <%= render "request", request: request %>
+  <% end %>
+</ul>
 
