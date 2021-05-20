@@ -24,6 +24,7 @@ class CatRentalRequest < ApplicationRecord
 
   def overlapping_requests
     query_str = '(start_date > ? AND start_date <= ?) OR (end_date >= ? AND end_date <= ?)'
+    my_id = self.id || 0
 
     CatRentalRequest
       .where(cat_id: self.cat_id)
@@ -34,6 +35,7 @@ class CatRentalRequest < ApplicationRecord
         self.start_date, 
         self.end_date
       )
+      .where("id != ?", my_id)
   end
 
   def overlapping_approved_requests
@@ -56,5 +58,16 @@ class CatRentalRequest < ApplicationRecord
     if self.start_date > self.end_date
       errors[:base] << "Can't start after the end date"
     end
+  end
+
+  def approve!
+    self.transaction do
+      update!(status: "APPROVED")
+      overlapping_pending_requests.update_all(status: "DENIED")
+    end
+  end
+
+  def deny! 
+    update_attributes(status: "DENIED")
   end
 end
