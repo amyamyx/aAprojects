@@ -68,6 +68,6 @@ class CatRentalRequest < ApplicationRecord
   end
 
   def deny! 
-    update_attributes(status: "DENIED")
+    update!(status: "DENIED")
   end
 end
