@@ -16,6 +16,28 @@ class CatRentalRequestsController < ApplicationController
     end
   end
 
+  def approve
+    request = CatRentalRequest.find(params[:id])
+    @cat = Cat.find_by(id: request.cat_id)
+
+    if request.approve!
+      redirect_to cat_path(@cat)
+    else
+      render json: request.errors.full_messages, status: :unprocessible_entity
+    end
+  end
+  
+  def deny
+    request = CatRentalRequest.find(params[:id])
+    @cat = Cat.find_by(id: request.cat_id)
+
+    if request.deny!
+      redirect_to cat_path(@cat)
+    else
+      render json: request.errors.full_messages, status: :unprocessible_entity
+    end
+  end
+
   private
 
   def request_params
