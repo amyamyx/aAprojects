@@ -9,6 +9,7 @@ class CatRentalRequestsController < ApplicationController
 
   def create
     @request = CatRentalRequest.new(request_params)
+    @request.user_id = current_user.id
     @cat = Cat.find_by(id: request_params[:cat_id])
     
     if @request.save
