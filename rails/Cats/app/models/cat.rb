@@ -28,6 +28,11 @@ class Cat < ApplicationRecord
     class_name: "CatRentalRequest",
     dependent: :destroy
 
+  belongs_to :owner, 
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: "User"
+
   def age
     distance_of_time_in_words_to_now(self.birth_date) + " old"
   end
