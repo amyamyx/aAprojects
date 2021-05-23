@@ -1,0 +1,15 @@
+/node_modules
+/config/master.key
+/config/secrets.yml
+Gemfile.lock
+/tmp
+/log
+/tmp/*
+/log/*
+!/log/.keep
+!/tmp/.keep
+/test/
+
+/.bundle
+/yarn-error.log
+.byebug_history
