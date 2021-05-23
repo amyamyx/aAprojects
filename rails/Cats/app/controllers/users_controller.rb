@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     
     if @user.save
+      login!(@user)
       redirect_to cats_url
     else
       render json: @user.errors.full_messages
