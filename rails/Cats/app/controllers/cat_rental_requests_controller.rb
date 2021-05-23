@@ -1,4 +1,6 @@
 class CatRentalRequestsController < ApplicationController
+  before_action :redirect_if_not_owner, only: [:approve, :deny]
+
   def new
     @cats = Cat.all
     @request = CatRentalRequest.new
@@ -42,5 +44,11 @@ class CatRentalRequestsController < ApplicationController
 
   def request_params
     params.require(:request).permit(:cat_id, :start_date, :end_date, :status)
+  end
+
+  def redirect_if_not_owner
+    request = CatRentalRequest.find_by(id: params[:id])
+    @cat = Cat.find_by(id: request.cat_id)
+    redirect_to cat_url(@cat) if @cat.user_id != current_user.id
   end
 end
