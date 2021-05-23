@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
+  before_action :redirect_when_signed_in
 
   def new
     @user = User.new
-    render :new
   end
 
   def create

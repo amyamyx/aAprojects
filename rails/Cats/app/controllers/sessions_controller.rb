@@ -1,8 +1,8 @@
 class SessionsController < ApplicationController
+  before_action :redirect_when_signed_in, except: [:destroy]
 
   def new
     @user = User.new
-    render :new
   end
   
   def create
@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
     )
     
     if @user
-      session[:session_token] = @user.reset_session_token!
+      login!(@user)
       redirect_to cats_url
     else
       redirect_to new_session_url
