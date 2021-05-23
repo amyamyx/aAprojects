@@ -13,6 +13,12 @@ class User < ApplicationRecord
     foreign_key: :user_id,
     class_name: "Cat",
     dependent: :destroy
+  
+  has_many :made_requests,
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: "CatRentalRequest",
+    dependent: :destroy
 
   def self.generate_session_token
     SecureRandom::urlsafe_base64(16)

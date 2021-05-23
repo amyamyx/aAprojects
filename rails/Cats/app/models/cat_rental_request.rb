@@ -21,6 +21,12 @@ class CatRentalRequest < ApplicationRecord
     primary_key: :id,
     foreign_key: :cat_id, 
     class_name: "Cat"
+  
+  belongs_to :requester, 
+    primary_key: :id,
+    foreign_key: :user_id,
+    class_name: "User"
+
 
   def overlapping_requests
     query_str = '(start_date > ? AND start_date <= ?) OR (end_date >= ? AND end_date <= ?)'
