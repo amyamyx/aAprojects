@@ -1,0 +1,17 @@
+Gemfile.lock
+
+/node_modules
+/config/master.key
+/config/secrets.yml
+/config/credentials.yml.enc
+Gemfile.lock
+/tmp/*
+/log/*
+/test/*
+!/log/.keep
+!/tmp/.keep
+!/test/.keep
+
+/.bundle
+/yarn-error.log
+.byebug_history
