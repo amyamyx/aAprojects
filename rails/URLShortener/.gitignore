@@ -13,3 +13,4 @@ Gemfile.lock
 /yarn-error.log
 
 .byebug_history
+yarn.lock
