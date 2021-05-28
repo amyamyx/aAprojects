@@ -13,3 +13,43 @@
  *= require_tree .
  *= require_self
  */
+
+ html {
+   background: #343030;
+ }
+
+ body {
+   background: #343030;
+   text-align: center;
+   display: block;
+ }
+
+ .main-logo {
+   font-family: 'Bungee Inline', cursive;
+   font-size: 75px;
+   color: #FDDB61;
+   font-weight: 400;
+ }
+
+ .page-header {
+    font-size: 40px;
+    color: #39BAAC;
+    font-family: 'Bungee Inline', cursive;
+ }
+
+label {
+  color: white;
+  font-family: sans-serif;
+}
+
+.button-div {
+  display: block;
+}
+
+.link-button {
+  background-color: skyblue;
+  color: black;
+  padding: 10px;
+  width: 150px;
+  display: fixed;
+}
