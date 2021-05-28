@@ -1,0 +1,6 @@
+<%= error_messages(flash.now[:errors]) %>
+<h1>Sign In</h1>
+
+<a href="<%= new_user_url %>">Go To Sign Up!</a>
+
+<%= render 'users/form', action: :sign_in %>
