@@ -43,16 +43,17 @@ label {
 }
 
 
-.link-button {
+.button {
   background-color: skyblue;
   color: black;
   padding: 10px;
   width: 150px;
   display: fixed;
   font-family: sans-serif;
+  border-radius: 5px;
 }
 
-.link-button:hover {
+.button:hover {
   background-color: dodgerblue;
   color: white;
 }
