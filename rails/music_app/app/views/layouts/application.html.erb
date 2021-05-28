@@ -15,6 +15,20 @@
     <div class="main-content">
       <header>
         <h1 class="main-logo">MUSIC APP</h1>
+        
+        <% if signed_in? %>
+          <nav>
+            <div class="user-detail">
+              Logged in as: <%= current_user.email %>
+              <form action="<%= session_url %>" method="post">
+                <%= auth_token %>
+                <%= delete_hidden_input %>
+                <input type="submit" class="button" value="Sign Out">
+              </form>
+            </div>
+          </nav>    
+        <% end %>
+        
       </header>
       
       <%= yield %>
