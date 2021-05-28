@@ -1,8 +1,6 @@
 <%= error_messages(flash.now[:errors]) %>
 <h1 class="page-header">Sign Up</h1>
 
-<div class="button-div">
-  <%= link_to 'Go To Sign In!', new_session_url, class: "link-button" %>
-</div>
+<%= link_to 'Go To Sign In!', new_session_url, class: "link-button" %>
 
 <%= render 'form', action: :sign_up %>
