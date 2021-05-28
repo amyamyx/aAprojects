@@ -14,14 +14,32 @@
  *= require_self
  */
 
- html {
-   background: #343030;
- }
+html, body, div, span, h1, h2, h3, h4, a, p,
+ol, ul, li, form, label, article, aside, figure,
+figcaption, footer, header, nav {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    text-decoration: none;
+    box-sizing: content-box;
+}
 
  body {
-   background: #343030;
+   background: black;
    text-align: center;
+   margin: 0;
+ }
+
+ .main-content {
+   background-color: #343030;
+   width: 800px;
+   border: solid grey;
+   border-width: 0 5px;
    display: block;
+   margin: auto;
  }
 
  .main-logo {
