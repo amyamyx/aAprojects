@@ -17,56 +17,51 @@
 html, body, div, span, h1, h2, h3, h4, a, p,
 ol, ul, li, form, label, article, aside, figure,
 figcaption, footer, header, nav {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-    text-decoration: none;
-    box-sizing: content-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  text-decoration: none;
+  box-sizing: content-box;
 }
 
- body {
-   background: black;
-   text-align: center;
-   margin: 0;
+body {
+  background: black;
+  text-align: center;
+  margin: 0;
  }
 
- .main-content {
-   background-color: #343030;
-   width: 800px;
-   border: solid grey;
-   border-width: 0 5px;
-   display: block;
-   margin: auto;
- }
-
- .main-logo {
-   font-family: 'Bungee Inline', cursive;
-   font-size: 75px;
-   color: #FDDB61;
-   font-weight: 400;
- }
-
- .page-header {
-    font-size: 40px;
-    color: #39BAAC;
-    font-family: 'Bungee Inline', cursive;
- }
-
-label {
-  color: white;
-  font-family: sans-serif;
+.main-content {
+  background-color: #343030;
+  width: 800px;
+  height: 100vh;
+  border: solid grey;
+  border-width: 0 5px;
+  display: block;
+  margin: auto;
 }
 
+.main-logo {
+  font-family: 'Bungee Inline', cursive;
+  font-size: 75px;
+  color: #FDDB61;
+  font-weight: 400;
+}
+
+.page-header {
+  font-size: 40px;
+  color: #39BAAC;
+  font-family: 'Bungee Inline', cursive;
+  margin: 20px;
+}
 
 .button {
   background-color: skyblue;
   color: black;
   padding: 10px;
   width: 150px;
-  display: fixed;
   font-family: sans-serif;
   border-radius: 5px;
 }
@@ -74,4 +69,33 @@ label {
 .button:hover {
   background-color: dodgerblue;
   color: white;
+}
+
+.user-detail {
+  display: flex;
+  float: right;
+  color: white;
+  font-family: sans-serif;
+}
+
+.form {
+  width: 400px;
+  margin: auto;
+}
+
+.form-div {
+  margin: 10px;
+}
+
+.form-label {
+  color: white;
+  font-family: sans-serif;
+  display: flex;
+  float: left;
+}
+
+.form-input {
+  font-family: sans-serif;
+  display: flex;
+  float: right;
 }

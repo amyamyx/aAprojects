@@ -5,15 +5,20 @@
 <form class="form" action="<%= action_url %>" method="post">
   <%= auth_token %>
 
-  <label for="email">Email</label>
-  <input type="text" id="email" name="user[email]">
+  <div class="form-div">
+    <label class="form-label" for="email">Email</label>
+    <input class="form-input" type="text" id="email" name="user[email]">
+  </div>
 
   <br>
   
-  <label for="password">Password</label>
-  <input type="password" id="password" name="user[password]">
+  <div class="form-div">
+    <label class="form-label" for="password">Password</label>
+    <input class="form-input" type="password" id="password" name="user[password]">
+  </div>
 
   <br>
-
-  <input type="submit" value="Submit">
+  <div class="form-div">
+    <input class="form-input" type="submit" value="Submit">
+  </div>
 </form>
