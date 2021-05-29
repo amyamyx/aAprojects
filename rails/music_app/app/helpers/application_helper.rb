@@ -24,4 +24,11 @@ module ApplicationHelper
 
     html.html_safe
   end
+
+  def patch_hidden_input
+    html = "<input type=\"hidden\" "
+    html += "name=\"_method\" value=\"PATCH\">"
+
+    html.html_safe
+  end
 end
