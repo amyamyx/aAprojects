@@ -1,0 +1,29 @@
+<% if action == :new %>
+  <% action_url = bands_url %>
+  <% page_header = "New Band!" %>
+<% else %>
+  <% action_url = band_url(@band) %>
+  <% page_header = "Edit"%>
+<% end %>
+
+<%= error_messages(flash.now[:errors]) %>
+<h1 class="page-header"><%= page_header %></h1>
+
+
+<form action="<%= action_url %>" method="post" class="form">
+  <%= auth_token %>
+  
+  <% if action == :edit %>
+    <%= patch_hidden_input %>
+  <% end %>
+  
+
+  <div class="form-div">
+    <label for="name" class="form-label">Name</label>
+    <input type="text" class="form-input" name="band[name]" value="<%= @band.name %>">
+  </div>
+
+  <div class="form-div">
+    <input type="submit" class="form-button" value="Submit">
+  </div>
+</form>
