@@ -62,7 +62,6 @@ body {
   background-color: skyblue;
   color: black;
   padding: 10px;
-  width: 150px;
   font-family: sans-serif;
   border-radius: 5px;
 }
@@ -77,6 +76,12 @@ body {
   float: right;
   color: white;
   font-family: sans-serif;
+}
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .form {
@@ -99,4 +104,11 @@ body {
   font-family: sans-serif;
   display: flex;
   float: right;
+}
+
+.sub-header {
+  font-family: 'Bungee Inline', cursive;
+  color: coral;
+  margin: 20px 0;
+  font-size: 25px;
 }
