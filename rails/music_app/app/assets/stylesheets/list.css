@@ -31,3 +31,16 @@
   font-size: 25px;
   color: black;
 }
+
+.link-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  padding-top: 1 0px;
+}
+
+.link-list-item form input[type="submit"] {
+  border: none;
+  margin-top: -10px;
+}
