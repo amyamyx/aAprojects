@@ -7,6 +7,8 @@ class User < ApplicationRecord
   before_validation :ensure_session_token
   attr_reader :password
 
+  has_many :notes, dependent: :destroy
+
   def self.generate_token
     SecureRandom::urlsafe_base64(16)
   end
