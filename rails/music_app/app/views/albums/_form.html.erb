@@ -1,0 +1,71 @@
+<% if action == :new %>
+  <% action_url = albums_url %>
+  <% page_header = "New #{ @band.name }'s Album!" %>
+  <% button_text = "Create Album!" %>
+<% else %>
+  <% action_url = album_url(@album) %>
+  <% page_header = "Edit #{ @album.title }"%>
+  <% button_text = "Update Album!" %>
+<% end %>
+
+<%= error_messages(flash.now[:errors]) %>
+<h1 class="page-header"><%= page_header %></h1>
+
+
+<form action="<%= action_url %>" method="post" class="form">
+  <%= auth_token %>
+  
+  <% if action == :edit %>
+    <%= patch_hidden_input %>
+  <% end %>
+  
+
+  <div class="form-div clearfix">
+    <label for="title" class="form-label">Name</label>
+    <input type="text" class="form-input" name="album[title]" value="<%= @album.title %>">
+  </div>
+
+  <div class="form-div clearfix">
+    <label for="band" class="form-label">Band</label>
+    <select name="album[band_id]" id="band" class="form-select">
+      <% @bands.each do |band| %>
+        <option value="<%= band.id %>" <%= select_helper(@band, band) %>>
+          <%= band.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="form-div clearfix">
+    <label for="live" class="radio-label">Live</label>
+    <input 
+      type="radio" 
+      class="radio-input" 
+      name="album[live]" 
+      value="true" 
+      id="live" 
+      <%= "checked" if @album.live %>>
+    <label for="studio" class="radio-label">Studio</label>
+    <input 
+      type="radio" 
+      class="radio-input" 
+      name="album[live]" 
+      value="false" 
+      id="studio"
+      <%= "checked" unless @album.live %>>
+  </div>
+
+  <div>
+    <label for="year" class="form-label">Year</label>
+    <input 
+      type="number" 
+      name="album[year]" 
+      id="year" 
+      class="form-input" 
+      value="<%= @album.year %>">
+  </div>
+
+  <div class="form-div clearfix">
+    <input type="submit" class="button" value="<%= button_text %>">
+  </div>
+</form>
