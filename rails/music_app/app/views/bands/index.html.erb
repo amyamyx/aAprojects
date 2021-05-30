@@ -1,9 +1,11 @@
-<h1>Band index</h1>
+<h1 class="page-header">Bands</h1>
 
-<ul>
+<ul class="main-list clearfix">
   <% @bands.each do |band|%>
-    <li>
-      <%= band.name %>
+    <li class="main-list-item">
+      <a href="<%= band_url(band) %>">
+        <%= band.name %>
+      </a>
     </li>
   <% end %>
 </ul>

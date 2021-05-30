@@ -14,21 +14,47 @@
  *= require_self
  */
 
-html, body, div, span, h1, h2, h3, h4, a, p,
-ol, ul, li, form, label, article, aside, figure,
-figcaption, footer, header, nav {
+/* reset */
+
+html, body, header, nav, h1, a,
+ul, li, strong, main, button, i,
+section, img, div, h2, p, form,
+fieldset, label, textarea,
+span, article, footer, time, small {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
+  outline: 0;
   font: inherit;
-  vertical-align: baseline;
-  text-decoration: none;
-  box-sizing: content-box;
+  color: inherit;
+  text-align: inherit;
+  text-decoration: inherit;
+  vertical-align: inherit;
+  box-sizing: inherit;
+  background: transparent;
 }
 
+ul {
+  list-style: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+button,
+input[type="submit"] {
+  cursor: pointer;
+}
+
+
+/* end of reset  */
+
 body {
-  background: black;
+  background: #111;
   text-align: center;
   margin: 0;
   color: white;
@@ -36,7 +62,7 @@ body {
 
 .main-content {
   background-color: #343030;
-  width: 800px;
+  width: 870px;
   height: 100vh;
   border: solid grey;
   border-width: 0 5px;
@@ -49,20 +75,21 @@ body {
   font-size: 75px;
   color: #FDDB61;
   font-weight: 400;
+  padding-top: 30px;
 }
 
 .page-header {
   font-size: 40px;
   color: #39BAAC;
   font-family: 'Bungee Inline', cursive;
-  margin: 20px;
+  margin: 30px;
 }
 
 .button {
   background-color: skyblue;
   color: black;
   padding: 10px;
-  font-family: sans-serif;
+  font-family: 'Raleway', sans-serif;
   border-radius: 5px;
 }
 
@@ -75,7 +102,7 @@ body {
   display: flex;
   float: right;
   color: white;
-  font-family: sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
 .clearfix:after {
@@ -84,31 +111,75 @@ body {
   clear: both;
 }
 
-.form {
-  width: 400px;
-  margin: auto;
-}
-
-.form-div {
-  margin: 10px;
-}
-
-.form-label {
-  color: white;
-  font-family: sans-serif;
-  display: flex;
-  float: left;
-}
-
-.form-input {
-  font-family: sans-serif;
-  display: flex;
-  float: right;
-}
-
 .sub-header {
   font-family: 'Bungee Inline', cursive;
   color: coral;
   margin: 20px 0;
   font-size: 25px;
 }
+
+/* form */
+
+.form {
+  width: 500px;
+  margin: auto;
+}
+
+.form-div {
+  margin: 30px;
+  font-size: 18px;
+}
+
+.form-label {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  float: left;
+}
+
+.form-input {
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  float: right;
+  width: 196px;
+  height: 27px;
+  background-color: white;
+  color: black;
+  text-align: left;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.form-div > .button {
+  display: flex;
+  float: right;
+  margin-top: 10px;
+  font-size: 18px;
+}
+/* end of form */
+
+/* list */
+
+.main-list {
+}
+
+.main-list-item {
+  width: 224px;
+  height: 100px;
+  background-color: #FDDB61;
+  border-radius: 10px;
+}
+
+.main-list-item > a {
+  width: 224px;
+  height: 100px;
+  font-size: 25px;
+  color: black;
+  margin: auto;
+  font-family: 'Raleway', sans-serif;
+}
+
+.main-list-item > a:visited {
+  color: black;
+}
+/* end of list */
