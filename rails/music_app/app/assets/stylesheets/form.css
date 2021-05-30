@@ -1,0 +1,36 @@
+.form {
+  width: 500px;
+  margin: auto;
+}
+
+.form-div {
+  margin: 30px;
+  font-size: 18px;
+}
+
+.form-label {
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  float: left;
+}
+
+.form-input {
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  float: right;
+  width: 196px;
+  height: 27px;
+  background-color: white;
+  color: black;
+  text-align: left;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.form-div > .button {
+  display: flex;
+  float: right;
+  margin-top: 10px;
+  font-size: 18px;
+}
