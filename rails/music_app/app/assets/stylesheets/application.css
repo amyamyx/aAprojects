@@ -127,6 +127,10 @@ nav a {
   font-size: 25px;
 }
 
+p {
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
+}
 @import "form.css";
 @import "list.css";
   

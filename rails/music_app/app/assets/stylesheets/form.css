@@ -1,6 +1,8 @@
 .form {
   width: 500px;
   margin: auto;
+  font-family: 'Raleway', sans-serif;
+  font-size: 18px;
 }
 
 .form-div {
