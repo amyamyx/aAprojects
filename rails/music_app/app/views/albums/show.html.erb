@@ -1,12 +1,12 @@
 <h1 class="page-header"><%= @album.title %></h1>
 <ul class="main-list">
-  <li class="main-list-item">
-    <a href=""><p>Track1!</p></a>
-  </li>
-
-  <li class="main-list-item">
-    <a href=""><p>Track2!</p></a>
-  </li>
+  <% @tracks.each do |track| %>
+    <li class="main-list-item">
+      <a href="<%= track_url(track) %>">
+        <p><%= track.title %></p>
+      </a>
+    </li>
+  <% end %>
 </ul>
 
 <h4 class="sub-header">Links</h4>
