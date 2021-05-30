@@ -99,11 +99,19 @@ body {
   color: white;
 }
 
+nav a {
+  display: flex;
+  float: left;
+  margin-left: 30px;
+}
+
 .user-detail {
   display: flex;
   float: right;
   color: white;
   font-family: 'Raleway', sans-serif;
+  margin-right: 30px;
+  align-items: center;
 }
 
 .clearfix:after {
