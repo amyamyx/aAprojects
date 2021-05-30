@@ -25,7 +25,7 @@ class NotesController < ApplicationController
   end
 
   def ensure_owner
-    note = note.find(params[:id])
+    note = Note.find(params[:id])
     redirect_to track_url(note.track_id) unless current_user.id == note.user_id
   end
 end
