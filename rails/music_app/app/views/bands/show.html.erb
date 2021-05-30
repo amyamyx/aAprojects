@@ -8,10 +8,26 @@
   band_name: <%= @band.name %>
 </h1>
 
+<h4 class="sub-header">Albums</h4>
+
+<% if @albums.empty? %>
+  <p>This band has no albums... yet!</p>
+<% end %>
+
+<ul class="main-list">
+  <% @albums.each do |album| %>
+    <li class="main-list-item">
+      <a href="<%= album_url(album) %>">
+        <p><%= album.title %></p>
+      </a>
+    </li>
+  <% end %>
+</ul>
+
 <h4 class="sub-header">Links</h4>
 <ul class="link-list">
   <li class="link-list-item">
-    <%= link_to 'New Album', band_url(@band), class: "button" %>
+    <%= link_to 'New Album', new_band_album_url(@band), class: "button" %>
   </li>
 
   <li class="link-list-item">
