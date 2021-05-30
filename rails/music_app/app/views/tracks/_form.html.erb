@@ -1,0 +1,75 @@
+<% if action == :new %>
+  <% action_url = tracks_url %>
+  <% page_header = "New #{ @album.title } Track" %>
+<% else %>
+  <% action_url = track_url(@track) %>
+  <% page_header = "Edit #{ @track.title }"%>
+<% end %>
+
+<%= error_messages(flash[:errors]) %>
+<h1 class="page-header"><%= page_header %></h1>
+
+
+<form action="<%= action_url %>" method="post" class="form">
+  <%= auth_token %>
+  
+  <% if action == :edit %>
+    <%= patch_hidden_input %>
+  <% end %>
+  
+
+  <div class="form-div clearfix">
+    <label for="title" class="form-label">Name</label>
+    <input type="text" class="form-input" name="track[title]" value="<%= @track.title %>">
+  </div>
+
+  <div class="form-div clearfix">
+    <label for="album" class="form-label">Album</label>
+    <select name="track[album_id]" id="album" class="form-select">
+      <% @albums.each do |album| %>
+        <option value="<%= album.id %>" <%= track_select_helper(@album, album) %>>
+          <%= album.title %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div>
+    <label for="ord" class="form-label">Ord</label>
+    <input 
+      type="number" 
+      name="track[ord]" 
+      id="ord" 
+      class="form-input" 
+      value="<%= @track.ord %>">
+  </div>
+
+  <div class="form-div clearfix">
+    <label for="standard" class="radio-label">Standard</label>
+    <input 
+      type="radio" 
+      class="radio-input" 
+      name="track[bonus]" 
+      value="false" 
+      id="standard" 
+      <%= "checked" unless @track.bonus %>>
+    <label for="bonus" class="radio-label">Bonus</label>
+    <input 
+      type="radio" 
+      class="radio-input" 
+      name="track[bonus]" 
+      value="true" 
+      id="bonus"
+      <%= "checked" if @track.bonus %>>
+  </div>
+
+  <label for="lyrics" class="form-label">Lyrics</label>
+  <textarea name="track[lyrics]" id="lyrics" class="form-input">
+    <%= @track.lyrics %>
+  </textarea>
+  
+
+  <div class="form-div clearfix">
+    <input type="submit" class="button" value="Submit">
+  </div>
+</form>

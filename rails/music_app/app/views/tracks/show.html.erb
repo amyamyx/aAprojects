@@ -1,0 +1,29 @@
+<h1 class="page-header"><%= @track.title %></h1>
+
+<p>♫ <%= @track.lyrics %></p>
+
+<h4 class="sub-header">New Note</h4>
+<%= render 'notes/new', track: @track %>
+
+<h4 class="sub-header">Notes</h4>
+<%# render 'notes/index', notes: @notes %>
+
+<h4 class="sub-header">Links</h4>
+
+<ul class="link-list">
+  <li class="link-list-item">
+    <%= link_to 'Edit track', edit_track_url(@track), class: "button" %>
+  </li>
+
+  <li class="link-list-item">
+    <form action="<%= track_url(@track) %>" method="post">
+      <%= auth_token %>
+      <%= delete_hidden_input %>
+      <input type="submit" value="Destroy track" class="button">
+    </form>
+  </li>
+  
+  <li class="link-list-item">
+    <%= link_to @album.title, album_url(@album), class: "button" %>
+  </li>
+</ul>
