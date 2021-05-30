@@ -40,7 +40,7 @@ class AlbumsController < ApplicationController
   def show
     @album = Album.find(params[:id])
     @band = @album.band
-    @tracks = @album.tracks
+    @tracks = @album.tracks.order(:ord)
   end
   
   def destroy
