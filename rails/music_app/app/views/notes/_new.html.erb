@@ -1,0 +1,11 @@
+<%= error_messages(flash[:errors]) %>
+
+<form action="<%= track_notes_url(track) %>" method="post" class="form">
+  <%= auth_token %>
+  <div class="form-div clearfix">
+    <label for="content">Content</label>
+    <textarea name="note[body]" class="form-input" id="content"></textarea>
+  </div>
+
+  <input type="submit" value="Submit" class="button">
+</form>

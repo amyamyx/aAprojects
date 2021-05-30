@@ -1,0 +1,24 @@
+<ul>
+  
+  <% notes.each do |note| %>
+    <li>
+      <p><%= note.body %></p>
+      <p>Authored by: <%= note.user.email %></p>
+      
+      
+      <% if note.user_id == current_user.id %>
+      
+        <form action="<%= note_url(note) %>" method="post">
+          <%= auth_token %>
+          <%= delete_hidden_input %>
+          <input type="submit" value="Destroy Note" class="button">
+        </form>
+        
+      <% end %>
+      
+    </li>
+    <br>
+    <br>
+  <% end %>
+  
+</ul>
