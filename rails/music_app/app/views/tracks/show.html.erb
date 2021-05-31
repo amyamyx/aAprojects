@@ -1,6 +1,6 @@
 <h1 class="page-header"><%= @track.title %></h1>
 
-<p>♫ <%= @track.lyrics %></p>
+<%= ugly_lyrics(@track.lyrics) %>
 
 <h4 class="sub-header">New Note</h4>
 <%= render 'notes/new', track: @track %>
