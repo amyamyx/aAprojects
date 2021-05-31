@@ -37,7 +37,7 @@ class TracksController < ApplicationController
 
   def show
     @track = Track.find(params[:id])
-    @notes = @track.notes
+    @notes = current_user.notes.where(track_id: params[:id]).order(:id)
     @album = @track.album
   end
 
