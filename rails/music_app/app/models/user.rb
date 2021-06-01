@@ -1,11 +1,11 @@
 require "bcrypt"
 
 class User < ApplicationRecord
-  validates :email, :session_token, presence: true, uniqueness: true
+  validates :email, :session_token, :activation_token, presence: true, uniqueness: true
   validates :password_digest, presence: true
   validates :password, length: { minimum: 6, allow_nil: true }
   validates :activated, inclusion: { in: [true, false] }
-  before_validation :ensure_session_token
+  before_validation :ensure_session_token, :ensure_activation_token
   attr_reader :password
 
   has_many :notes, dependent: :destroy
@@ -28,6 +28,10 @@ class User < ApplicationRecord
 
   def ensure_session_token
     self.session_token ||= User.generate_token
+  end
+
+  def ensure_activation_token
+    self.activation_token ||= User.generate_token
   end
 
   def password=(password)
