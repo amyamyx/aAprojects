@@ -22,12 +22,15 @@ class UsersController <ApplicationController
   end
 
   def activate
-    user = User.find(params[:id])
-    if user.activate!
+    user = User.find_by(activation_token: params[:activation_token])
+    
+    if user
       flash[:activate_message] = "Your account is activated! Please log in!"
+      user.activate!
+      # send welcome email
       redirect_to new_session_url
     else
-      render json: user.errors.full_messages, status: :unprocessible_entity
+      render json: "Invalid token", status: :not_found
     end
   end
 end
