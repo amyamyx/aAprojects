@@ -20,4 +20,14 @@ class UsersController <ApplicationController
   def show
     @user = User.find(params[:id])
   end
+
+  def activate
+    user = User.find(params[:id])
+    if user.activate!
+      flash[:activate_message] = "Your account is activated! Please log in!"
+      redirect_to new_session_url
+    else
+      render json: user.errors.full_messages, status: :unprocessible_entity
+    end
+  end
 end
