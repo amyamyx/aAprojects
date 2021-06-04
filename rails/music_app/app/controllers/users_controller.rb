@@ -1,5 +1,5 @@
 class UsersController <ApplicationController
-  before_action :ensure_logged_out, except: [:show]
+  before_action :ensure_logged_out, only: [:activate]
   before_action :ensure_logged_in, only: [:show]
 
   def new
@@ -9,8 +9,10 @@ class UsersController <ApplicationController
     user = User.new(user_params)
 
     if user.save
-      login!(user)
-      redirect_to bands_url
+      msg = UserMailer.activate_email(user)
+      msg.deliver_now
+
+      render :check_email_page
     else
       flash.now[:errors] = user.errors.full_messages
       render :new
@@ -23,11 +25,12 @@ class UsersController <ApplicationController
 
   def activate
     user = User.find_by(activation_token: params[:activation_token])
-    
     if user
-      flash[:activate_message] = "Your account is activated! Please log in!"
+      flash[:notice] = "Your account is activated! Please log in!"
       user.activate!
-      # send welcome email
+      msg = UserMailer.welcome_email(user)
+      msg.deliver_now
+
       redirect_to new_session_url
     else
       render json: "Invalid token", status: :not_found
