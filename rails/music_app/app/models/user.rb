@@ -44,7 +44,6 @@ class User < ApplicationRecord
   end
 
   def activate!
-    self.activated = true
-    self.save!
+    self.toggle!(:activated) unless self.activated
   end
 end
