@@ -6,7 +6,7 @@ class Tag < ApplicationRecord
 
   def self.search(name, model = nil)
     tags = Tag.where("name LIKE ?", "%#{ name }%").includes(:taggable)
-    tags = tags.select { |tag| tag.taggable_type == model } if model
+    tags = tags.select { |tag| tag.taggable_type == model } if model && model != ""
     tags.map { |tag| tag.taggable }
   end
 end
