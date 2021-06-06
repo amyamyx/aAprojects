@@ -1,7 +1,7 @@
 class UsersController <ApplicationController
   before_action :ensure_logged_out, only: [:activate]
   before_action :ensure_logged_in, only: [:show]
-
+  before_action :ensure_admin, only:[:index, :admin]
   def new
   end
 
@@ -21,6 +21,16 @@ class UsersController <ApplicationController
   
   def show
     @user = User.find(params[:id])
+  end
+
+  def index
+    @users = User.all.order(:id)
+  end
+
+  def admin
+    user = User.find(params[:id])
+    user.update(admin: true)
+    redirect_to users_url
   end
 
   def activate
