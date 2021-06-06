@@ -22,4 +22,8 @@ Rails.application.routes.draw do
   end
   
   resources :notes, only: [:destroy]
+
+  resources :tags do 
+    get 'search', to: 'tags#search', as: :search, on: :collection
+  end
 end
