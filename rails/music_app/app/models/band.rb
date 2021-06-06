@@ -3,4 +3,5 @@ class Band < ApplicationRecord
 
   has_many :albums, dependent: :destroy
   has_many :tracks, through: :albums, source: :tracks
+  has_many :tags, as: :taggable, dependent: :destroy
 end
