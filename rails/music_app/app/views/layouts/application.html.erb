@@ -19,7 +19,11 @@
         
         <% if signed_in? %>
           <nav class="clearfix">
-            <a href="<%= bands_url %>" class="button">Take me Home</a>
+            <%= link_to 'Take me Home', bands_url, class: "button" %>
+            <% if current_user.admin %>
+              <%= link_to 'All Users', users_url, class: "button" %>
+            <% end %>
+            
             <div class="user-detail">
               Logged in as: <%= current_user.email %>
               <form action="<%= session_url %>" method="post">

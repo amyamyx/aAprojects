@@ -1,0 +1,19 @@
+.user-list {
+  display: flex;
+  /* justify-items: space-around; */
+  width: 100%;
+  flex-wrap: wrap;
+}
+.user-list-item {
+  width: calc(20% - 10px);
+  height: 100px;
+}
+
+.user-list-item p {
+  margin-bottom: -5px;
+}
+
+.user-list-item .button {
+  font-size: 15px;
+  padding: 5px;
+}
