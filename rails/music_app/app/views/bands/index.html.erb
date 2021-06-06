@@ -1,3 +1,5 @@
+<%= error_messages(flash[:errors]) %>
+
 <h1 class="page-header">Bands</h1>
 
 <ul class="main-list clearfix">
@@ -11,4 +13,8 @@
 </ul>
 
 <h4 class="sub-header">Links</h4>
-<%= link_to 'New band', new_band_url, class: "button" %>
+
+<% if current_user.admin %>
+  <%= link_to 'New band', new_band_url, class: "button" %>
+<% end %>
+

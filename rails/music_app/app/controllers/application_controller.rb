@@ -30,6 +30,13 @@ class ApplicationController < ActionController::Base
     render json: "you can't perform this action when logged in" if signed_in?
   end
 
+  def ensure_admin
+    if !current_user.admin
+      flash[:errors] = ["Admin permission is needed to perform this action."]
+      redirect_to bands_url
+    end
+  end
+
   def user_params
     params.require(:user).permit(:email, :password)
   end

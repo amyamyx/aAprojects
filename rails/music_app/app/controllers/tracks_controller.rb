@@ -1,5 +1,6 @@
 class TracksController < ApplicationController
   before_action :ensure_logged_in
+  before_action :ensure_admin, except: [:show]
 
   def new
     @track = Track.new
@@ -37,7 +38,7 @@ class TracksController < ApplicationController
 
   def show
     @track = Track.find(params[:id])
-    @notes = current_user.notes.where(track_id: params[:id]).order(:id)
+    @notes = @track.notes.order(:id)
     @album = @track.album
   end
 

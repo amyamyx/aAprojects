@@ -12,21 +12,25 @@
 <h4 class="sub-header">Links</h4>
 
 <ul class="link-list">
-  <li class="link-list-item">
-    <a href="<%= new_album_track_url(@album) %>" class="button">New track</a>
-  </li>
 
-  <li class="link-list-item">
-    <%= link_to 'Edit album', edit_album_url(@album), class: "button" %>
-  </li>
+  
+  <% if current_user.admin %>
+    <li class="link-list-item">
+      <a href="<%= new_album_track_url(@album) %>" class="button">New track</a>
+    </li>
 
-  <li class="link-list-item">
-    <form action="<%= album_url(@album) %>" method="post">
-      <%= auth_token %>
-      <%= delete_hidden_input %>
-      <input type="submit" value="Destroy album" class="button">
-    </form>
-  </li>
+    <li class="link-list-item">
+      <%= link_to 'Edit album', edit_album_url(@album), class: "button" %>
+    </li>
+
+    <li class="link-list-item">
+      <form action="<%= album_url(@album) %>" method="post">
+        <%= auth_token %>
+        <%= delete_hidden_input %>
+        <input type="submit" value="Destroy album" class="button">
+      </form>
+    </li>
+  <% end %>
   
   <li class="link-list-item">
     <%= link_to "Back to #{ @band.name }", band_url(@band), class: "button" %>
