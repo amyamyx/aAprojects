@@ -32,7 +32,27 @@
                 <input type="submit" class="button" value="Sign Out">
               </form>
             </div>
-          </nav>    
+          </nav>
+
+          <br>
+          <br>
+
+          <form action="<%= search_tags_url %>" method="post">
+            <%= auth_token %>
+            <input type="hidden" name="_method" value="GET">
+            <label for="search">Search by tag: </label>
+            <input type="input" name="search_term" id="search">
+
+            <label for="model"></label>
+            <select name="model" id="model">
+              <option value="" selected>Search all types</option>
+              <option value="Band">Search Bands</option>
+              <option value="Album">Search Albums</option>
+              <option value="Track">Search Tracks</option>
+            </select>
+            <input type="submit" value="Search">
+
+          </form>    
         <% end %>
         
       </header>

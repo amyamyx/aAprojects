@@ -1,0 +1,7 @@
+<h1 class="page-header">Search Result</h1>
+
+<ul>
+  <% @taggables.each do |taggable| %>
+    <li><%= taggable_li(taggable) %></li>
+  <% end %>
+</ul>
