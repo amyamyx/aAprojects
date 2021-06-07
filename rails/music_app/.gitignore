@@ -15,3 +15,5 @@ Gemfile.lock
 /.bundle
 /yarn-error.log
 .byebug_history
+
+Guardfile
