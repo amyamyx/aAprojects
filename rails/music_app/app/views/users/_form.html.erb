@@ -1,4 +1,5 @@
 <% action_url = action == :sign_up ? users_url : session_url%>
+<% submit_text = action == :sign_up ? "Create User" : "Sign In" %>
 
 <br>
 <br>
@@ -19,6 +20,6 @@
 
   <br>
   <div class="form-div">
-    <input class="button" type="submit" value="Submit">
+    <input class="button" type="submit" value="<%= submit_text %>">
   </div>
 </form>
