@@ -1,2 +1,8 @@
 gitignore_files
 css/
+js/args_exercise/
+js/callback_ex/
+js/demo.js
+rails/auth_2022/
+rails/reddit_clone/
+rails/test_tag/
